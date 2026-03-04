@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 export interface DhikrItem {
   dhikr_id: string;
@@ -47,9 +47,9 @@ export const DhikrList: DhikrItem[] = [
   },
   {
     dhikr_id: 'Tasbeeh',
-    Arabic: 'Tasbeeh',
-    Transliteration: '',
-    Meaning: '',
+    Arabic: 'Tasbeeh ',
+    Transliteration: ' ',
+    Meaning: ' ',
     DhikrSelectorText: 'Tasbeeh',
   },
 ];
@@ -57,22 +57,48 @@ export const DhikrList: DhikrItem[] = [
 interface DhikrContextType {
   activeDhikrIndex: number;
   activeDhikr: DhikrItem;
-  selectDhikr: (index: number) => void;
-  navigateDhikrNext: () => void;
-  navigateDhikrPrev: () => void;
+  dhikrCounts: { [key: string]: number };
+  selectDhikr: (index: number, currentCounterValue: number) => void;
+  navigateDhikrNext: (currentCounterValue: number) => void;
+  navigateDhikrPrev: (currentCounterValue: number) => void;
+  updateDhikrCount: (dhikrId: string, count: number) => void;
 }
 
 const DhikrContext = createContext<DhikrContextType | undefined>(undefined);
 
 export function DhikrProvider({ children }: { children: ReactNode }) {
   const [activeDhikrIndex, setActiveDhikrIndex] = useState(0);
+  const [dhikrCounts, setDhikrCounts] = useState<{ [key: string]: number }>({});
 
-  const selectDhikr = (index: number) => {
+  const activeDhikr = DhikrList[activeDhikrIndex];
+
+  useEffect(() => {
+    const initialCounts: { [key: string]: number } = {};
+    DhikrList.forEach(dhikr => {
+      if (dhikrCounts[dhikr.dhikr_id] === undefined) {
+        initialCounts[dhikr.dhikr_id] = 0;
+      }
+    });
+    if (Object.keys(initialCounts).length > 0) {
+      setDhikrCounts(prev => ({ ...prev, ...initialCounts }));
+    }
+  }, []);
+
+  const updateDhikrCount = (dhikrId: string, count: number) => {
+    console.log('Updating Dhikr count:', dhikrId, 'to', count);
+    setDhikrCounts(prev => ({ ...prev, [dhikrId]: count }));
+  };
+
+  const selectDhikr = (index: number, currentCounterValue: number) => {
+    console.log('Saving current count for', activeDhikr.dhikr_id, ':', currentCounterValue);
+    updateDhikrCount(activeDhikr.dhikr_id, currentCounterValue);
     console.log('Dhikr selected:', DhikrList[index].dhikr_id);
     setActiveDhikrIndex(index);
   };
 
-  const navigateDhikrNext = () => {
+  const navigateDhikrNext = (currentCounterValue: number) => {
+    console.log('Saving current count for', activeDhikr.dhikr_id, ':', currentCounterValue);
+    updateDhikrCount(activeDhikr.dhikr_id, currentCounterValue);
     setActiveDhikrIndex((prev) => {
       const nextIndex = (prev + 1) % DhikrList.length;
       console.log('Navigating to next Dhikr:', DhikrList[nextIndex].dhikr_id);
@@ -80,7 +106,9 @@ export function DhikrProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const navigateDhikrPrev = () => {
+  const navigateDhikrPrev = (currentCounterValue: number) => {
+    console.log('Saving current count for', activeDhikr.dhikr_id, ':', currentCounterValue);
+    updateDhikrCount(activeDhikr.dhikr_id, currentCounterValue);
     setActiveDhikrIndex((prev) => {
       const prevIndex = (prev - 1 + DhikrList.length) % DhikrList.length;
       console.log('Navigating to previous Dhikr:', DhikrList[prevIndex].dhikr_id);
@@ -88,16 +116,16 @@ export function DhikrProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const activeDhikr = DhikrList[activeDhikrIndex];
-
   return (
     <DhikrContext.Provider
       value={{
         activeDhikrIndex,
         activeDhikr,
+        dhikrCounts,
         selectDhikr,
         navigateDhikrNext,
         navigateDhikrPrev,
+        updateDhikrCount,
       }}
     >
       {children}

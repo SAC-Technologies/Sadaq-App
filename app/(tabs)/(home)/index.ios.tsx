@@ -39,11 +39,9 @@ export default function HomeScreen() {
   const [dhikrSheetVisible, setDhikrSheetVisible] = useState(false);
 
   const formattedCounterValue = counterValue.toLocaleString('en-US');
-
-  const showDhikrDetails = activeDhikr.dhikr_id !== 'Tasbeeh';
-  const dhikrArabic = showDhikrDetails ? activeDhikr.Arabic : '';
-  const dhikrTransliteration = showDhikrDetails ? activeDhikr.Transliteration : '';
-  const dhikrMeaning = showDhikrDetails ? activeDhikr.Meaning : '';
+  const dhikrArabic = activeDhikr.Arabic;
+  const dhikrTransliteration = activeDhikr.Transliteration;
+  const dhikrMeaning = activeDhikr.Meaning;
   const dhikrSelectorText = activeDhikr.DhikrSelectorText;
 
   const handleOpenMenu = () => {
@@ -68,12 +66,16 @@ export default function HomeScreen() {
 
   const handleLeftArrow = () => {
     console.log('Left arrow button tapped');
-    navigateDhikrPrev();
+    navigateDhikrPrev(counterValue);
   };
 
   const handleRightArrow = () => {
     console.log('Right arrow button tapped');
-    navigateDhikrNext();
+    navigateDhikrNext(counterValue);
+  };
+
+  const handleSelectDhikr = (index: number) => {
+    selectDhikr(index, counterValue);
   };
 
   return (
@@ -109,92 +111,78 @@ export default function HomeScreen() {
 
       <SafeAreaView style={styles.safeArea} edges={['bottom']}>
         <View style={styles.content}>
-          {/* Dhikr Text Section */}
           <View style={styles.dhikrSection}>
-            {showDhikrDetails && dhikrArabic ? (
-              <Text
-                style={[
-                  styles.dhikrArabic,
-                  { color: currentTheme.GlobalTextColour },
-                ]}
-              >
-                {dhikrArabic}
-              </Text>
-            ) : null}
-            {showDhikrDetails && dhikrTransliteration ? (
-              <Text
-                style={[
-                  styles.dhikrTransliteration,
-                  { color: currentTheme.GlobalTextColour },
-                ]}
-              >
-                {dhikrTransliteration}
-              </Text>
-            ) : null}
-            {showDhikrDetails && dhikrMeaning ? (
-              <Text
-                style={[
-                  styles.dhikrMeaning,
-                  { color: currentTheme.GlobalTextColour },
-                ]}
-              >
-                {dhikrMeaning}
-              </Text>
-            ) : null}
+            <Text
+              style={[
+                styles.dhikrArabic,
+                { color: currentTheme.GlobalTextColour },
+              ]}
+            >
+              {dhikrArabic}
+            </Text>
+            <Text
+              style={[
+                styles.dhikrTransliteration,
+                { color: currentTheme.GlobalTextColour },
+              ]}
+            >
+              {dhikrTransliteration}
+            </Text>
+            <Text
+              style={[
+                styles.dhikrMeaning,
+                { color: currentTheme.GlobalTextColour },
+              ]}
+            >
+              {dhikrMeaning}
+            </Text>
           </View>
 
-          {/* Counter Circle with Arrows - Centered Container */}
           <View style={styles.counterContainer}>
-            <View style={styles.counterSection}>
-              {/* Left Arrow */}
-              <TouchableOpacity
-                style={styles.arrowButton}
-                onPress={handleLeftArrow}
-              >
-                <IconSymbol
-                  ios_icon_name="chevron.left"
-                  android_material_icon_name="chevron-left"
-                  size={32}
-                  color={currentTheme.CounterArrowColour}
-                />
-              </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.arrowButton}
+              onPress={handleLeftArrow}
+            >
+              <IconSymbol
+                ios_icon_name="chevron.left"
+                android_material_icon_name="chevron-left"
+                size={32}
+                color={currentTheme.CounterArrowColour}
+              />
+            </TouchableOpacity>
 
-              {/* Counter Circle */}
-              <Pressable
-                style={[
-                  styles.counterCircle,
-                  { borderColor: currentTheme.GlobalTextColour },
-                ]}
-                onPress={incrementCounter}
-              >
-                <View style={styles.counterCircleArea}>
-                  <Text
-                    style={[
-                      styles.counterValue,
-                      { color: currentTheme.GlobalTextColour },
-                    ]}
-                  >
-                    {formattedCounterValue}
-                  </Text>
-                </View>
-              </Pressable>
+            <Pressable
+              style={[
+                styles.counterCircle,
+                { borderColor: currentTheme.GlobalTextColour },
+              ]}
+              onPress={incrementCounter}
+            >
+              <View style={styles.counterCircleArea}>
+                <Text
+                  style={[
+                    styles.counterValue,
+                    { color: currentTheme.GlobalTextColour },
+                  ]}
+                >
+                  {formattedCounterValue}
+                </Text>
+              </View>
+            </Pressable>
 
-              {/* Right Arrow */}
-              <TouchableOpacity
-                style={styles.arrowButton}
-                onPress={handleRightArrow}
-              >
-                <IconSymbol
-                  ios_icon_name="chevron.right"
-                  android_material_icon_name="chevron-right"
-                  size={32}
-                  color={currentTheme.CounterArrowColour}
-                />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={styles.arrowButton}
+              onPress={handleRightArrow}
+            >
+              <IconSymbol
+                ios_icon_name="chevron.right"
+                android_material_icon_name="chevron-right"
+                size={32}
+                color={currentTheme.CounterArrowColour}
+              />
+            </TouchableOpacity>
           </View>
 
-          {/* Reset and Reduce Buttons */}
           <View style={styles.buttonRow}>
             <TouchableOpacity
               style={styles.actionButton}
@@ -221,7 +209,6 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* Dhikr Selector Button */}
           <TouchableOpacity
             style={[
               styles.dhikrSelectorButton,
@@ -241,25 +228,22 @@ export default function HomeScreen() {
         </View>
       </SafeAreaView>
 
-      {/* Warning Modal */}
       <WarningModal
         visible={showWarning}
         onClose={closeWarning}
         message="Slow down and focus on your Dhikr for maximum benefit"
       />
 
-      {/* Left Side Menu */}
       <LeftSideMenu
         visible={menuVisible}
         onClose={handleCloseMenu}
         textColor={currentTheme.GlobalTextColour}
       />
 
-      {/* Dhikr Bottom Sheet */}
       <DhikrBottomSheet
         visible={dhikrSheetVisible}
         onClose={handleCloseDhikrSheet}
-        onSelectDhikr={selectDhikr}
+        onSelectDhikr={handleSelectDhikr}
         activeDhikrIndex={activeDhikrIndex}
         textColor={currentTheme.GlobalTextColour}
         backgroundColor={currentTheme.AppBackground}
@@ -287,8 +271,9 @@ const styles = StyleSheet.create({
   dhikrSection: {
     alignItems: 'center',
     marginBottom: 40,
-    minHeight: 100,
+    minHeight: 140,
     justifyContent: 'center',
+    width: '100%',
   },
   dhikrArabic: {
     fontSize: 32,
@@ -309,18 +294,13 @@ const styles = StyleSheet.create({
   },
   counterContainer: {
     width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 30,
-  },
-  counterSection: {
     flexDirection: 'row',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    justifyContent: 'center',
+    marginBottom: 30,
   },
   arrowButton: {
     padding: 16,
-    marginHorizontal: 20,
   },
   counterCircle: {
     width: 220,

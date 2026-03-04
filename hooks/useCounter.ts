@@ -1,14 +1,22 @@
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { useDhikr } from '../contexts/DhikrContext';
 
 const MAX_COUNTER_VALUE = 999999;
-const TAP_RATE_LIMIT = 7; // taps per second
-const TAP_WINDOW = 1000; // 1 second in milliseconds
+const TAP_RATE_LIMIT = 7;
+const TAP_WINDOW = 1000;
 
 export function useCounter() {
+  const { activeDhikr, dhikrCounts, updateDhikrCount } = useDhikr();
   const [counterValue, setCounterValue] = useState(0);
   const [showWarning, setShowWarning] = useState(false);
   const tapTimestamps = useRef<number[]>([]);
+
+  useEffect(() => {
+    const savedCount = dhikrCounts[activeDhikr.dhikr_id] || 0;
+    console.log('Loading saved count for', activeDhikr.dhikr_id, ':', savedCount);
+    setCounterValue(savedCount);
+  }, [activeDhikr.dhikr_id, dhikrCounts]);
 
   const checkTapRate = useCallback((): boolean => {
     const now = Date.now();
@@ -38,24 +46,27 @@ export function useCounter() {
     setCounterValue((prev) => {
       const newValue = prev >= MAX_COUNTER_VALUE ? 0 : prev + 1;
       console.log('Counter value changed:', prev, '->', newValue);
+      updateDhikrCount(activeDhikr.dhikr_id, newValue);
       return newValue;
     });
-  }, [checkTapRate]);
+  }, [checkTapRate, activeDhikr.dhikr_id, updateDhikrCount]);
 
   const decrementCounter = useCallback(() => {
     console.log('Counter decrement button tapped');
     setCounterValue((prev) => {
       const newValue = Math.max(0, prev - 1);
       console.log('Counter value changed:', prev, '->', newValue);
+      updateDhikrCount(activeDhikr.dhikr_id, newValue);
       return newValue;
     });
-  }, []);
+  }, [activeDhikr.dhikr_id, updateDhikrCount]);
 
   const resetCounter = useCallback(() => {
-    console.log('Counter reset button tapped');
+    console.log('Counter reset button tapped for', activeDhikr.dhikr_id);
     setCounterValue(0);
+    updateDhikrCount(activeDhikr.dhikr_id, 0);
     tapTimestamps.current = [];
-  }, []);
+  }, [activeDhikr.dhikr_id, updateDhikrCount]);
 
   const closeWarning = useCallback(() => {
     console.log('Warning modal closed');

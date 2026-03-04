@@ -9,8 +9,8 @@ import {
   Pressable,
   ScrollView,
 } from 'react-native';
-import { BlurView } from 'expo-blur';
 import { DhikrList, DhikrItem } from '@/contexts/DhikrContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface DhikrBottomSheetProps {
   visible: boolean;
@@ -47,7 +47,7 @@ export default function DhikrBottomSheet({
           style={styles.bottomSheetContainer}
           onPress={(e) => e.stopPropagation()}
         >
-          <BlurView intensity={90} style={styles.blurContainer}>
+          <SafeAreaView style={styles.safeAreaContainer} edges={['bottom']}>
             <View style={styles.handleContainer}>
               <View
                 style={[styles.handle, { backgroundColor: textColor }]}
@@ -64,57 +64,54 @@ export default function DhikrBottomSheet({
             >
               {DhikrList.map((dhikr, index) => {
                 const isActive = index === activeDhikrIndex;
-                const showDetails = dhikr.dhikr_id !== 'Tasbeeh';
+                const dhikrArabicText = dhikr.Arabic;
+                const dhikrSelectorText = dhikr.DhikrSelectorText;
+                const dhikrMeaningText = dhikr.Meaning;
 
                 return (
-                  <React.Fragment key={dhikr.dhikr_id}>
-                    <TouchableOpacity
-                      style={[
-                        styles.dhikrOption,
-                        isActive && {
-                          backgroundColor: `${textColor}20`,
-                          borderColor: textColor,
-                          borderWidth: 1,
-                        },
-                      ]}
-                      onPress={() => handleSelectDhikr(index)}
-                    >
-                      <View style={styles.dhikrContent}>
-                        {showDetails && (
-                          <Text
-                            style={[
-                              styles.dhikrArabic,
-                              { color: textColor },
-                            ]}
-                          >
-                            {dhikr.Arabic}
-                          </Text>
-                        )}
-                        <Text
-                          style={[
-                            styles.dhikrTransliteration,
-                            { color: textColor },
-                          ]}
-                        >
-                          {dhikr.DhikrSelectorText}
-                        </Text>
-                        {showDetails && dhikr.Meaning && (
-                          <Text
-                            style={[
-                              styles.dhikrMeaning,
-                              { color: textColor, opacity: 0.7 },
-                            ]}
-                          >
-                            {dhikr.Meaning}
-                          </Text>
-                        )}
-                      </View>
-                    </TouchableOpacity>
-                  </React.Fragment>
+                  <TouchableOpacity
+                    key={dhikr.dhikr_id}
+                    style={[
+                      styles.dhikrOption,
+                      isActive && {
+                        backgroundColor: `${textColor}20`,
+                        borderColor: textColor,
+                        borderWidth: 1,
+                      },
+                    ]}
+                    onPress={() => handleSelectDhikr(index)}
+                  >
+                    <View style={styles.dhikrContent}>
+                      <Text
+                        style={[
+                          styles.dhikrArabic,
+                          { color: textColor },
+                        ]}
+                      >
+                        {dhikrArabicText}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.dhikrTransliteration,
+                          { color: textColor },
+                        ]}
+                      >
+                        {dhikrSelectorText}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.dhikrMeaning,
+                          { color: textColor, opacity: 0.7 },
+                        ]}
+                      >
+                        {dhikrMeaningText}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
                 );
               })}
             </ScrollView>
-          </BlurView>
+          </SafeAreaView>
         </Pressable>
       </Pressable>
     </Modal>
@@ -124,16 +121,20 @@ export default function DhikrBottomSheet({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'flex-end',
   },
   bottomSheetContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     maxHeight: '70%',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    overflow: 'hidden',
   },
-  blurContainer: {
+  safeAreaContainer: {
     flex: 1,
   },
   handleContainer: {
@@ -159,10 +160,10 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 20,
-    paddingBottom: 40,
+    paddingBottom: 20,
   },
   dhikrOption: {
-    paddingVertical: 16,
+    paddingVertical: 15,
     paddingHorizontal: 16,
     borderRadius: 12,
     marginBottom: 12,
