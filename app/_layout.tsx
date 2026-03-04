@@ -9,6 +9,7 @@ import { useColorScheme } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { WidgetProvider } from "@/contexts/WidgetContext";
 import { ThemeProvider as TasbeehThemeProvider } from "@/contexts/ThemeContext";
+import { DhikrProvider } from "@/contexts/DhikrContext";
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import React, { useEffect } from "react";
@@ -64,20 +65,22 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <TasbeehThemeProvider>
-        <WidgetProvider>
-          <ThemeProvider value={colorScheme === "dark" ? customDarkTheme : customLightTheme}>
-            <SystemBars style="light" />
-            <Stack
-              screenOptions={{
-                headerShown: false,
-              }}
-            >
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-            <StatusBar style="light" />
-          </ThemeProvider>
-        </WidgetProvider>
+        <DhikrProvider>
+          <WidgetProvider>
+            <ThemeProvider value={colorScheme === "dark" ? customDarkTheme : customLightTheme}>
+              <SystemBars style="light" />
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                }}
+              >
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+              <StatusBar style="light" />
+            </ThemeProvider>
+          </WidgetProvider>
+        </DhikrProvider>
       </TasbeehThemeProvider>
     </GestureHandlerRootView>
   );

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -11,12 +11,22 @@ import {
 import { Stack } from 'expo-router';
 import { IconSymbol } from '@/components/IconSymbol';
 import { useThemeConfig } from '@/contexts/ThemeContext';
+import { useDhikr } from '@/contexts/DhikrContext';
 import { useCounter } from '@/hooks/useCounter';
 import WarningModal from '@/components/WarningModal';
+import LeftSideMenu from '@/components/LeftSideMenu';
+import DhikrBottomSheet from '@/components/DhikrBottomSheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   const { currentTheme } = useThemeConfig();
+  const {
+    activeDhikrIndex,
+    activeDhikr,
+    selectDhikr,
+    navigateDhikrNext,
+    navigateDhikrPrev,
+  } = useDhikr();
   const {
     counterValue,
     showWarning,
@@ -26,12 +36,46 @@ export default function HomeScreen() {
     closeWarning,
   } = useCounter();
 
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [dhikrSheetVisible, setDhikrSheetVisible] = useState(false);
+
   const formattedCounterValue = counterValue.toLocaleString('en-US');
 
-  const dhikrArabic = 'سُبحانَ الله';
-  const dhikrTransliteration = 'SubhanAllah';
-  const dhikrMeaning = 'Glory be to Allah';
-  const dhikrSelectorText = 'SubhanAllah';
+  const showDhikrDetails = activeDhikr.dhikr_id !== 'Tasbeeh';
+  const dhikrArabic = showDhikrDetails ? activeDhikr.Arabic : '';
+  const dhikrTransliteration = showDhikrDetails ? activeDhikr.Transliteration : '';
+  const dhikrMeaning = showDhikrDetails ? activeDhikr.Meaning : '';
+  const dhikrSelectorText = activeDhikr.DhikrSelectorText;
+
+  const handleOpenMenu = () => {
+    console.log('Hamburger menu button tapped');
+    setMenuVisible(true);
+  };
+
+  const handleCloseMenu = () => {
+    console.log('Left side menu closed');
+    setMenuVisible(false);
+  };
+
+  const handleOpenDhikrSheet = () => {
+    console.log('Dhikr selector button tapped');
+    setDhikrSheetVisible(true);
+  };
+
+  const handleCloseDhikrSheet = () => {
+    console.log('Dhikr bottom sheet closed');
+    setDhikrSheetVisible(false);
+  };
+
+  const handleLeftArrow = () => {
+    console.log('Left arrow button tapped');
+    navigateDhikrPrev();
+  };
+
+  const handleRightArrow = () => {
+    console.log('Right arrow button tapped');
+    navigateDhikrNext();
+  };
 
   return (
     <View
@@ -51,7 +95,7 @@ export default function HomeScreen() {
           headerLeft: () => (
             <TouchableOpacity
               style={styles.hamburgerButton}
-              onPress={() => console.log('Hamburger menu tapped')}
+              onPress={handleOpenMenu}
             >
               <IconSymbol
                 ios_icon_name="line.horizontal.3"
@@ -68,79 +112,87 @@ export default function HomeScreen() {
         <View style={styles.content}>
           {/* Dhikr Text Section */}
           <View style={styles.dhikrSection}>
-            <Text
-              style={[
-                styles.dhikrArabic,
-                { color: currentTheme.GlobalTextColour },
-              ]}
-            >
-              {dhikrArabic}
-            </Text>
-            <Text
-              style={[
-                styles.dhikrTransliteration,
-                { color: currentTheme.GlobalTextColour },
-              ]}
-            >
-              {dhikrTransliteration}
-            </Text>
-            <Text
-              style={[
-                styles.dhikrMeaning,
-                { color: currentTheme.GlobalTextColour },
-              ]}
-            >
-              {dhikrMeaning}
-            </Text>
+            {showDhikrDetails && dhikrArabic ? (
+              <Text
+                style={[
+                  styles.dhikrArabic,
+                  { color: currentTheme.GlobalTextColour },
+                ]}
+              >
+                {dhikrArabic}
+              </Text>
+            ) : null}
+            {showDhikrDetails && dhikrTransliteration ? (
+              <Text
+                style={[
+                  styles.dhikrTransliteration,
+                  { color: currentTheme.GlobalTextColour },
+                ]}
+              >
+                {dhikrTransliteration}
+              </Text>
+            ) : null}
+            {showDhikrDetails && dhikrMeaning ? (
+              <Text
+                style={[
+                  styles.dhikrMeaning,
+                  { color: currentTheme.GlobalTextColour },
+                ]}
+              >
+                {dhikrMeaning}
+              </Text>
+            ) : null}
           </View>
 
-          {/* Counter Circle with Arrows */}
-          <View style={styles.counterSection}>
-            {/* Left Arrow */}
-            <TouchableOpacity
-              style={styles.arrowButton}
-              onPress={() => console.log('Left arrow tapped')}
-            >
-              <IconSymbol
-                ios_icon_name="chevron.left"
-                android_material_icon_name="chevron-left"
-                size={32}
-                color={currentTheme.CounterArrowColour}
-              />
-            </TouchableOpacity>
+          {/* Counter Circle with Arrows - Centered Container */}
+          <View style={styles.counterContainer}>
+            <View style={styles.counterSection}>
+              {/* Left Arrow */}
+              <TouchableOpacity
+                style={styles.arrowButton}
+                onPress={handleLeftArrow}
+              >
+                <IconSymbol
+                  ios_icon_name="chevron.left"
+                  android_material_icon_name="chevron-left"
+                  size={32}
+                  color={currentTheme.CounterArrowColour}
+                />
+              </TouchableOpacity>
 
-            {/* Counter Circle */}
-            <Pressable
-              style={[
-                styles.counterCircle,
-                { borderColor: currentTheme.GlobalTextColour },
-              ]}
-              onPress={incrementCounter}
-            >
-              <View style={styles.counterCircleArea}>
-                <Text
-                  style={[
-                    styles.counterValue,
-                    { color: currentTheme.GlobalTextColour },
-                  ]}
-                >
-                  {formattedCounterValue}
-                </Text>
-              </View>
-            </Pressable>
+              {/* Counter Circle */}
+              <Pressable
+                style={[
+                  styles.counterCircle,
+                  { borderColor: currentTheme.GlobalTextColour },
+                ]}
+                onPress={incrementCounter}
+              >
+                <View style={styles.counterCircleArea}>
+                  <Text
+                    style={[
+                      styles.counterValue,
+                      { color: currentTheme.GlobalTextColour },
+                    ]}
+                  >
+                    {formattedCounterValue}
+                  </Text>
+                </View>
+              </Pressable>
 
-            {/* Right Arrow */}
-            <TouchableOpacity
-              style={styles.arrowButton}
-              onPress={() => console.log('Right arrow tapped')}
-            >
-              <IconSymbol
-                ios_icon_name="chevron.right"
-                android_material_icon_name="chevron-right"
-                size={32}
-                color={currentTheme.CounterArrowColour}
-              />
-            </TouchableOpacity>
+              {/* Right Arrow */}
+              <TouchableOpacity
+                style={styles.arrowButton}
+                onPress={handleRightArrow}
+              >
+                <IconSymbol
+                  ios_icon_name="chevron.right"
+                  android_material_icon_name="chevron-right"
+                  size={32}
+                  color={currentTheme.CounterArrowColour}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* Reset and Reduce Buttons */}
@@ -176,7 +228,7 @@ export default function HomeScreen() {
               styles.dhikrSelectorButton,
               { borderColor: currentTheme.GlobalTextColour },
             ]}
-            onPress={() => console.log('Dhikr selector tapped')}
+            onPress={handleOpenDhikrSheet}
           >
             <Text
               style={[
@@ -195,6 +247,23 @@ export default function HomeScreen() {
         visible={showWarning}
         onClose={closeWarning}
         message="Slow down and focus on your Dhikr for maximum benefit"
+      />
+
+      {/* Left Side Menu */}
+      <LeftSideMenu
+        visible={menuVisible}
+        onClose={handleCloseMenu}
+        textColor={currentTheme.GlobalTextColour}
+      />
+
+      {/* Dhikr Bottom Sheet */}
+      <DhikrBottomSheet
+        visible={dhikrSheetVisible}
+        onClose={handleCloseDhikrSheet}
+        onSelectDhikr={selectDhikr}
+        activeDhikrIndex={activeDhikrIndex}
+        textColor={currentTheme.GlobalTextColour}
+        backgroundColor={currentTheme.AppBackground}
       />
     </View>
   );
@@ -220,6 +289,8 @@ const styles = StyleSheet.create({
   dhikrSection: {
     alignItems: 'center',
     marginBottom: 40,
+    minHeight: 100,
+    justifyContent: 'center',
   },
   dhikrArabic: {
     fontSize: 32,
@@ -238,11 +309,16 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     textAlign: 'center',
   },
+  counterContainer: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 30,
+  },
   counterSection: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 30,
   },
   arrowButton: {
     padding: 16,
