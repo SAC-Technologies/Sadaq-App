@@ -11,11 +11,17 @@ export function useCounter() {
   const [counterValue, setCounterValue] = useState(0);
   const [showWarning, setShowWarning] = useState(false);
   const tapTimestamps = useRef<number[]>([]);
+  const previousDhikrId = useRef<string>(activeDhikr.dhikr_id);
 
+  // Load saved count when activeDhikr changes
   useEffect(() => {
-    const savedCount = dhikrCounts[activeDhikr.dhikr_id] || 0;
-    console.log('Loading saved count for', activeDhikr.dhikr_id, ':', savedCount);
-    setCounterValue(savedCount);
+    // Only update if the Dhikr actually changed
+    if (previousDhikrId.current !== activeDhikr.dhikr_id) {
+      const savedCount = dhikrCounts[activeDhikr.dhikr_id] || 0;
+      console.log('Loading saved count for', activeDhikr.dhikr_id, ':', savedCount);
+      setCounterValue(savedCount);
+      previousDhikrId.current = activeDhikr.dhikr_id;
+    }
   }, [activeDhikr.dhikr_id, dhikrCounts]);
 
   const checkTapRate = useCallback((): boolean => {
