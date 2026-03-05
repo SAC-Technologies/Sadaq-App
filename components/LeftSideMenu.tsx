@@ -74,7 +74,7 @@ export default function LeftSideMenu({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <Pressable style={styles.overlay} onPress={onClose}>
+      <Pressable style={styles.overlay} onPress={() => onClose()}>
         <Pressable
           style={styles.menuContainer}
           onPress={(e) => e.stopPropagation()}

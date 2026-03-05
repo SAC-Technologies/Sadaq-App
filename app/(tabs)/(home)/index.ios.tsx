@@ -75,6 +75,7 @@ export default function HomeScreen() {
   };
 
   const handleSelectDhikr = (index: number) => {
+    console.log('Selecting Dhikr at index:', index);
     selectDhikr(index, counterValue);
   };
 
@@ -96,7 +97,7 @@ export default function HomeScreen() {
           headerLeft: () => (
             <TouchableOpacity
               style={styles.hamburgerButton}
-              onPress={handleOpenMenu}
+              onPress={() => handleOpenMenu()}
             >
               <IconSymbol
                 ios_icon_name="line.horizontal.3"
@@ -141,7 +142,7 @@ export default function HomeScreen() {
           <View style={styles.counterContainer}>
             <TouchableOpacity
               style={styles.arrowButton}
-              onPress={handleLeftArrow}
+              onPress={() => handleLeftArrow()}
             >
               <IconSymbol
                 ios_icon_name="chevron.left"
@@ -156,7 +157,7 @@ export default function HomeScreen() {
                 styles.counterCircle,
                 { borderColor: currentTheme.GlobalTextColour },
               ]}
-              onPress={incrementCounter}
+              onPress={() => incrementCounter()}
             >
               <View style={styles.counterCircleArea}>
                 <Text
@@ -172,7 +173,7 @@ export default function HomeScreen() {
 
             <TouchableOpacity
               style={styles.arrowButton}
-              onPress={handleRightArrow}
+              onPress={() => handleRightArrow()}
             >
               <IconSymbol
                 ios_icon_name="chevron.right"
@@ -186,7 +187,7 @@ export default function HomeScreen() {
           <View style={styles.buttonRow}>
             <TouchableOpacity
               style={styles.actionButton}
-              onPress={resetCounter}
+              onPress={() => resetCounter()}
             >
               <IconSymbol
                 ios_icon_name="arrow.clockwise"
@@ -198,7 +199,7 @@ export default function HomeScreen() {
 
             <TouchableOpacity
               style={styles.actionButton}
-              onPress={decrementCounter}
+              onPress={() => decrementCounter()}
             >
               <IconSymbol
                 ios_icon_name="minus"
@@ -214,7 +215,7 @@ export default function HomeScreen() {
               styles.dhikrSelectorButton,
               { borderColor: currentTheme.GlobalTextColour },
             ]}
-            onPress={handleOpenDhikrSheet}
+            onPress={() => handleOpenDhikrSheet()}
           >
             <Text
               style={[
@@ -230,20 +231,20 @@ export default function HomeScreen() {
 
       <WarningModal
         visible={showWarning}
-        onClose={closeWarning}
+        onClose={() => closeWarning()}
         message="Slow down and focus on your Dhikr for maximum benefit"
       />
 
       <LeftSideMenu
         visible={menuVisible}
-        onClose={handleCloseMenu}
+        onClose={() => handleCloseMenu()}
         textColor={currentTheme.GlobalTextColour}
       />
 
       <DhikrBottomSheet
         visible={dhikrSheetVisible}
-        onClose={handleCloseDhikrSheet}
-        onSelectDhikr={handleSelectDhikr}
+        onClose={() => handleCloseDhikrSheet()}
+        onSelectDhikr={(index) => handleSelectDhikr(index)}
         activeDhikrIndex={activeDhikrIndex}
         textColor={currentTheme.GlobalTextColour}
         backgroundColor={currentTheme.AppBackground}
