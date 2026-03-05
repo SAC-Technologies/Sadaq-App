@@ -42,11 +42,9 @@ export default function DhikrBottomSheet({
       animationType="slide"
       onRequestClose={onClose}
     >
-      <Pressable style={styles.overlay} onPress={onClose}>
-        <Pressable
-          style={styles.bottomSheetContainer}
-          onPress={(e) => e.stopPropagation()}
-        >
+      <View style={styles.overlay}>
+        <Pressable style={styles.overlayPressable} onPress={onClose} />
+        <View style={styles.bottomSheetContainer}>
           <SafeAreaView style={styles.safeAreaContainer} edges={['bottom']}>
             <View style={styles.handleContainer}>
               <View
@@ -61,6 +59,7 @@ export default function DhikrBottomSheet({
             <ScrollView
               style={styles.scrollView}
               contentContainerStyle={styles.scrollContent}
+              showsVerticalScrollIndicator={true}
             >
               {DhikrList.map((dhikr, index) => {
                 const isActive = index === activeDhikrIndex;
@@ -112,8 +111,8 @@ export default function DhikrBottomSheet({
               })}
             </ScrollView>
           </SafeAreaView>
-        </Pressable>
-      </Pressable>
+        </View>
+      </View>
     </Modal>
   );
 }
@@ -124,13 +123,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'flex-end',
   },
-  bottomSheetContainer: {
+  overlayPressable: {
     position: 'absolute',
-    bottom: 0,
+    top: 0,
     left: 0,
     right: 0,
+    bottom: 0,
+  },
+  bottomSheetContainer: {
     maxHeight: '70%',
-    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    backgroundColor: 'rgba(0, 0, 0, 0.95)',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },

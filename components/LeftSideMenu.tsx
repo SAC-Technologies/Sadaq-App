@@ -33,18 +33,6 @@ const menuItems: MenuItem[] = [
     android_material_icon_name: 'palette',
   },
   {
-    id: 'challenges',
-    label: 'Challenges',
-    ios_icon_name: 'trophy.fill',
-    android_material_icon_name: 'emoji-events',
-  },
-  {
-    id: 'achievements',
-    label: 'Your Achievements',
-    ios_icon_name: 'medal.fill',
-    android_material_icon_name: 'military-tech',
-  },
-  {
     id: 'settings',
     label: 'App Settings',
     ios_icon_name: 'gearshape.fill',
@@ -75,6 +63,10 @@ export default function LeftSideMenu({
   onClose,
   textColor,
 }: LeftSideMenuProps) {
+  const handleMenuItemPress = (itemLabel: string) => {
+    console.log('Menu item tapped:', itemLabel);
+  };
+
   return (
     <Modal
       visible={visible}
@@ -96,9 +88,7 @@ export default function LeftSideMenu({
                 <React.Fragment key={item.id}>
                   <TouchableOpacity
                     style={styles.menuItem}
-                    onPress={() => {
-                      console.log('Menu item tapped:', item.label);
-                    }}
+                    onPress={() => handleMenuItemPress(item.label)}
                   >
                     <IconSymbol
                       ios_icon_name={item.ios_icon_name}
