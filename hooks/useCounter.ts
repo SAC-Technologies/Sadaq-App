@@ -52,20 +52,21 @@ export function useCounter() {
     setCounterValue((prev) => {
       const newValue = prev >= MAX_COUNTER_VALUE ? 0 : prev + 1;
       console.log('Counter value changed:', prev, '->', newValue);
-      updateDhikrCount(activeDhikr.dhikr_id, newValue);
       return newValue;
     });
-  }, [checkTapRate, activeDhikr.dhikr_id, updateDhikrCount]);
+    
+    // Update global state AFTER local state update, outside the setter callback
+    const newValue = counterValue >= MAX_COUNTER_VALUE ? 0 : counterValue + 1;
+    updateDhikrCount(activeDhikr.dhikr_id, newValue);
+  }, [checkTapRate, activeDhikr.dhikr_id, updateDhikrCount, counterValue]);
 
   const decrementCounter = useCallback(() => {
     console.log('Counter decrement button tapped');
-    setCounterValue((prev) => {
-      const newValue = Math.max(0, prev - 1);
-      console.log('Counter value changed:', prev, '->', newValue);
-      updateDhikrCount(activeDhikr.dhikr_id, newValue);
-      return newValue;
-    });
-  }, [activeDhikr.dhikr_id, updateDhikrCount]);
+    const newValue = Math.max(0, counterValue - 1);
+    console.log('Counter value changed:', counterValue, '->', newValue);
+    setCounterValue(newValue);
+    updateDhikrCount(activeDhikr.dhikr_id, newValue);
+  }, [activeDhikr.dhikr_id, updateDhikrCount, counterValue]);
 
   const resetCounter = useCallback(() => {
     console.log('Counter reset button tapped for', activeDhikr.dhikr_id);
