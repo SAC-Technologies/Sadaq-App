@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useRef } from 'react';
 
 export interface DhikrItem {
   dhikr_id: string;
@@ -69,19 +69,23 @@ const DhikrContext = createContext<DhikrContextType | undefined>(undefined);
 export function DhikrProvider({ children }: { children: ReactNode }) {
   const [activeDhikrIndex, setActiveDhikrIndex] = useState(0);
   const [dhikrCounts, setDhikrCounts] = useState<{ [key: string]: number }>({});
+  const isInitialized = useRef(false);
 
   const activeDhikr = DhikrList[activeDhikrIndex];
 
   useEffect(() => {
+    if (isInitialized.current) {
+      return;
+    }
+
     const initialCounts: { [key: string]: number } = {};
     DhikrList.forEach(dhikr => {
-      if (dhikrCounts[dhikr.dhikr_id] === undefined) {
-        initialCounts[dhikr.dhikr_id] = 0;
-      }
+      initialCounts[dhikr.dhikr_id] = 0;
     });
-    if (Object.keys(initialCounts).length > 0) {
-      setDhikrCounts(prev => ({ ...prev, ...initialCounts }));
-    }
+    
+    console.log('Initializing Dhikr counts:', initialCounts);
+    setDhikrCounts(initialCounts);
+    isInitialized.current = true;
   }, []);
 
   const updateDhikrCount = (dhikrId: string, count: number) => {
