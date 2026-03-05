@@ -41,31 +41,31 @@ export default function DhikrBottomSheet({
       animationType="slide"
       onRequestClose={onClose}
     >
-      {/* Layer 1: The Backdrop */}
+      {/* The Backdrop */}
       <View style={styles.backdrop}>
         <Pressable style={styles.backdropPressable} onPress={onClose} />
         
-        {/* Layer 2: The Transparent Glass Sheet */}
-        <View style={[styles.glassSheet, { borderColor: textColor }]}>
+        {/* The Container (Bottom Sheet View) */}
+        <View style={styles.container}>
           
-          {/* Layer 3: The Scroll */}
+          {/* The Header: Drag-indicator pill */}
+          <View style={styles.dragIndicator} />
+          
+          {/* The Scroll Layout */}
           <ScrollView style={styles.scrollContainer}>
             
-            {/* Layer 4: The Options */}
+            {/* The Buttons (Single Column Pills) */}
             {DhikrList.map((dhikr, index) => {
               const optionText = dhikr.DhikrSelectorText;
               
               return (
                 <TouchableOpacity
                   key={dhikr.dhikr_id}
-                  style={[
-                    styles.optionButton,
-                    { borderBottomColor: textColor },
-                  ]}
+                  style={styles.pillButton}
                   onPress={() => handleSelectDhikr(index)}
                 >
-                  {/* Layer 5: The Text */}
-                  <Text style={[styles.optionText, { color: textColor }]}>
+                  {/* Text Styling */}
+                  <Text style={[styles.pillText, { color: textColor }]}>
                     {optionText}
                   </Text>
                 </TouchableOpacity>
@@ -79,11 +79,11 @@ export default function DhikrBottomSheet({
 }
 
 const styles = StyleSheet.create({
-  // Layer 1: The Backdrop
+  // The Backdrop
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   backdropPressable: {
     position: 'absolute',
@@ -92,29 +92,40 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  // Layer 2: The Transparent Glass Sheet
-  glassSheet: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-    borderWidth: 1,
-    width: '100%',
-    height: 400,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+  // The Container (Bottom Sheet View)
+  container: {
+    height: 450,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     padding: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
-  // Layer 3: The Scroll
+  // The Header: Drag-indicator pill
+  dragIndicator: {
+    width: 40,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  // The Scroll Layout
   scrollContainer: {
     flex: 1,
   },
-  // Layer 4: The Options
-  optionButton: {
-    paddingVertical: 18,
-    borderBottomWidth: 1,
+  // Button Styling (Single Column Pills)
+  pillButton: {
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.10)',
+    paddingVertical: 16,
+    marginBottom: 12,
+    borderWidth: 0,
+    borderBottomWidth: 0,
   },
-  // Layer 5: The Text
-  optionText: {
+  // Text Styling
+  pillText: {
     fontSize: 18,
     textAlign: 'center',
+    fontWeight: '600',
   },
 });
