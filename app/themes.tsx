@@ -25,7 +25,6 @@ function resolveImageSource(source: string | number | ImageSourcePropType | unde
 export default function ThemesScreen() {
   const { activeTheme, changeTheme, themes } = useTheme();
   const router = useRouter();
-  const AppBackground = activeTheme.bgValue;
   const GlobalTextColour = activeTheme.textColor;
 
   console.log('ThemesScreen loaded with active theme:', activeTheme.name);
@@ -46,8 +45,10 @@ export default function ThemesScreen() {
         options={{
           headerShown: true,
           title: 'Select Theme',
+          headerTransparent: true,
+          headerShadowVisible: false,
           headerStyle: {
-            backgroundColor: typeof AppBackground === 'string' ? AppBackground : 'transparent',
+            backgroundColor: 'transparent',
           },
           headerTintColor: GlobalTextColour,
           headerLeft: () => (
@@ -107,7 +108,12 @@ export default function ThemesScreen() {
                     <Text
                       style={[
                         styles.themeName,
-                        { color: GlobalTextColour },
+                        {
+                          color: GlobalTextColour,
+                          textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                          textShadowOffset: { width: 1, height: 1 },
+                          textShadowRadius: 4,
+                        },
                       ]}
                     >
                       {themeName}
@@ -122,7 +128,12 @@ export default function ThemesScreen() {
                       <Text
                         style={[
                           styles.selectButtonText,
-                          { color: GlobalTextColour },
+                          {
+                            color: GlobalTextColour,
+                            textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                            textShadowOffset: { width: 1, height: 1 },
+                            textShadowRadius: 4,
+                          },
                         ]}
                       >
                         Use
@@ -138,32 +149,17 @@ export default function ThemesScreen() {
     </>
   );
 
-  if (activeTheme.bgType === 'color') {
-    return (
-      <View
-        style={[
-          styles.container,
-          { backgroundColor: AppBackground as string },
-        ]}
-      >
-        {renderContent()}
-      </View>
-    );
-  }
-
   return (
-    <ImageBackground
-      source={resolveImageSource(AppBackground)}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       {renderContent()}
-    </ImageBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#000000',
   },
   safeArea: {
     flex: 1,

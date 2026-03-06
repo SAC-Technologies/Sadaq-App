@@ -98,8 +98,10 @@ export default function HomeScreen() {
         options={{
           headerShown: true,
           title: 'Digital Tasbeeh',
+          headerTransparent: true,
+          headerShadowVisible: false,
           headerStyle: {
-            backgroundColor: typeof AppBackground === 'string' ? AppBackground : 'transparent',
+            backgroundColor: 'transparent',
           },
           headerTintColor: GlobalTextColour,
           headerLeft: () => (
@@ -124,7 +126,12 @@ export default function HomeScreen() {
             <Text
               style={[
                 styles.dhikrArabic,
-                { color: GlobalTextColour },
+                {
+                  color: GlobalTextColour,
+                  textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                  textShadowOffset: { width: 1, height: 1 },
+                  textShadowRadius: 4,
+                },
               ]}
             >
               {dhikrArabic}
@@ -132,7 +139,12 @@ export default function HomeScreen() {
             <Text
               style={[
                 styles.dhikrTransliteration,
-                { color: GlobalTextColour },
+                {
+                  color: GlobalTextColour,
+                  textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                  textShadowOffset: { width: 1, height: 1 },
+                  textShadowRadius: 4,
+                },
               ]}
             >
               {dhikrTransliteration}
@@ -140,7 +152,12 @@ export default function HomeScreen() {
             <Text
               style={[
                 styles.dhikrMeaning,
-                { color: GlobalTextColour },
+                {
+                  color: GlobalTextColour,
+                  textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                  textShadowOffset: { width: 1, height: 1 },
+                  textShadowRadius: 4,
+                },
               ]}
             >
               {dhikrMeaning}
@@ -171,7 +188,12 @@ export default function HomeScreen() {
                 <Text
                   style={[
                     styles.counterValue,
-                    { color: GlobalTextColour },
+                    {
+                      color: GlobalTextColour,
+                      textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                      textShadowOffset: { width: 1, height: 1 },
+                      textShadowRadius: 4,
+                    },
                   ]}
                 >
                   {formattedCounterValue}
@@ -228,7 +250,12 @@ export default function HomeScreen() {
             <Text
               style={[
                 styles.dhikrSelectorText,
-                { color: GlobalTextColour },
+                {
+                  color: GlobalTextColour,
+                  textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                  textShadowOffset: { width: 1, height: 1 },
+                  textShadowRadius: 4,
+                },
               ]}
             >
               {dhikrSelectorText}
