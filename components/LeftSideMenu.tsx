@@ -11,12 +11,14 @@ import {
 } from 'react-native';
 import { IconSymbol } from '@/components/IconSymbol';
 import { BlurView } from 'expo-blur';
+import { useRouter } from 'expo-router';
 
 interface MenuItem {
   id: string;
   label: string;
   ios_icon_name: string;
   android_material_icon_name: string;
+  route?: string;
 }
 
 const menuItems: MenuItem[] = [
@@ -25,12 +27,14 @@ const menuItems: MenuItem[] = [
     label: 'Home',
     ios_icon_name: 'house.fill',
     android_material_icon_name: 'home',
+    route: '/',
   },
   {
     id: 'themes',
     label: 'Themes',
     ios_icon_name: 'paintbrush.fill',
     android_material_icon_name: 'palette',
+    route: '/themes',
   },
   {
     id: 'settings',
@@ -63,8 +67,18 @@ export default function LeftSideMenu({
   onClose,
   textColor,
 }: LeftSideMenuProps) {
-  const handleMenuItemPress = (itemLabel: string) => {
-    console.log('Menu item tapped:', itemLabel);
+  const router = useRouter();
+
+  const handleMenuItemPress = (item: MenuItem) => {
+    console.log('Menu item tapped:', item.label);
+    
+    if (item.route) {
+      console.log('Navigating to route:', item.route);
+      router.push(item.route);
+      onClose();
+    } else {
+      console.log('No route defined for:', item.label);
+    }
   };
 
   return (
@@ -88,7 +102,7 @@ export default function LeftSideMenu({
                 <React.Fragment key={item.id}>
                   <TouchableOpacity
                     style={styles.menuItem}
-                    onPress={() => handleMenuItemPress(item.label)}
+                    onPress={() => handleMenuItemPress(item)}
                   >
                     <IconSymbol
                       ios_icon_name={item.ios_icon_name}
