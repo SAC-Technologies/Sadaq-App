@@ -1,44 +1,94 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
 
-interface ThemeConfig {
-  AppBackground: string;
-  GlobalTextColour: string;
-  CounterArrowColour: string;
+export interface Theme {
+  id: string;
+  name: string;
+  bgType: 'color' | 'image';
+  bgValue: string;
+  textColor: string;
+  isPremium: boolean;
+  price: string | null;
 }
 
 interface ThemeContextType {
-  currentTheme: ThemeConfig;
-  setTheme: (theme: ThemeConfig) => void;
+  activeTheme: Theme;
+  changeTheme: (themeId: string) => void;
+  themes: Theme[];
 }
 
-const defaultTheme: ThemeConfig = {
-  AppBackground: '#000080',
-  GlobalTextColour: '#FFFFFF',
-  CounterArrowColour: '#FFFFFF',
-};
+const THEMES: Theme[] = [
+  {
+    id: 'default',
+    name: 'Default',
+    bgType: 'color',
+    bgValue: '#A4CFDB',
+    textColor: '#FFFFFF',
+    isPremium: false,
+    price: null,
+  },
+  {
+    id: 'dark',
+    name: 'Dark',
+    bgType: 'color',
+    bgValue: '#5E2D3C',
+    textColor: '#261A1E',
+    isPremium: false,
+    price: null,
+  },
+  {
+    id: 'luxury',
+    name: 'Luxury',
+    bgType: 'color',
+    bgValue: '#C7B683',
+    textColor: '#33312B',
+    isPremium: false,
+    price: null,
+  },
+];
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [currentTheme, setCurrentTheme] = useState<ThemeConfig>(defaultTheme);
+  const [activeTheme, setActiveTheme] = useState<Theme>(THEMES[0]);
 
-  const setTheme = (theme: ThemeConfig) => {
-    console.log('Theme changed:', theme);
-    setCurrentTheme(theme);
-  };
+  const changeTheme = useCallback((themeId: string) => {
+    console.log('Changing theme to:', themeId);
+    const newTheme = THEMES.find((theme) => theme.id === themeId);
+    if (newTheme) {
+      setActiveTheme(newTheme);
+      console.log('Theme changed successfully:', newTheme.name);
+    } else {
+      console.warn('Theme not found:', themeId);
+    }
+  }, []);
 
   return (
-    <ThemeContext.Provider value={{ currentTheme, setTheme }}>
+    <ThemeContext.Provider value={{ activeTheme, changeTheme, themes: THEMES }}>
       {children}
     </ThemeContext.Provider>
   );
 }
 
-export function useThemeConfig() {
+export function useTheme() {
   const context = useContext(ThemeContext);
   if (context === undefined) {
-    throw new Error('useThemeConfig must be used within a ThemeProvider');
+    throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;
+}
+
+// Legacy hook for backward compatibility with existing code
+export function useThemeConfig() {
+  const { activeTheme } = useTheme();
+  return {
+    currentTheme: {
+      AppBackground: activeTheme.bgValue,
+      GlobalTextColour: activeTheme.textColor,
+      CounterArrowColour: activeTheme.textColor,
+    },
+    setTheme: () => {
+      console.warn('setTheme is deprecated. Use changeTheme from useTheme hook instead.');
+    },
+  };
 }
