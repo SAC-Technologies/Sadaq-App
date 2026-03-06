@@ -10,9 +10,8 @@ import {
   Image,
   ImageSourcePropType,
 } from 'react-native';
-import { Stack, useRouter } from 'expo-router';
+import { Stack, useRouter, usePathname } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
-import { IconSymbol } from '@/components/IconSymbol';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Helper to resolve image sources (handles both local require() and remote URLs)
@@ -26,6 +25,7 @@ export default function ThemesScreen() {
   const { activeTheme, changeTheme, themes } = useTheme();
   const router = useRouter();
   const GlobalTextColour = activeTheme.textColor;
+  const AppBackground = activeTheme.bgValue;
 
   console.log('ThemesScreen loaded with active theme:', activeTheme.name);
 
@@ -34,40 +34,19 @@ export default function ThemesScreen() {
     changeTheme(themeId);
   };
 
-  const handleBackPress = () => {
-    console.log('Back button pressed from ThemesScreen');
-    router.back();
-  };
-
   const renderContent = () => (
     <>
       <Stack.Screen
         options={{
-          headerShown: true,
-          title: 'Select Theme',
-          headerTransparent: true,
-          headerShadowVisible: false,
-          headerStyle: {
-            backgroundColor: 'transparent',
-          },
-          headerTintColor: GlobalTextColour,
-          headerLeft: () => (
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={() => handleBackPress()}
-            >
-              <IconSymbol
-                ios_icon_name="chevron.left"
-                android_material_icon_name="arrow-back"
-                size={24}
-                color={GlobalTextColour}
-              />
-            </TouchableOpacity>
-          ),
+          headerShown: false,
         }}
       />
 
-      <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+      <View style={StyleSheet.absoluteFillObject}>
+        <View style={styles.darkOverlay} />
+      </View>
+
+      <SafeAreaView style={styles.safeArea}>
         <ScrollView
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
@@ -80,7 +59,6 @@ export default function ThemesScreen() {
               return (
                 <React.Fragment key={theme.id}>
                   <View style={styles.themeCard}>
-                    {/* Conditionally render preview based on bgType */}
                     {theme.bgType === 'color' ? (
                       <View
                         style={[
@@ -149,10 +127,27 @@ export default function ThemesScreen() {
     </>
   );
 
+  if (activeTheme.bgType === 'color') {
+    return (
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: AppBackground as string },
+        ]}
+      >
+        {renderContent()}
+      </View>
+    );
+  }
+
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={resolveImageSource(AppBackground)}
+      style={styles.container}
+      resizeMode="cover"
+    >
       {renderContent()}
-    </View>
+    </ImageBackground>
   );
 }
 
@@ -161,17 +156,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000000',
   },
+  darkOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+  },
   safeArea: {
     flex: 1,
-  },
-  backButton: {
-    padding: 8,
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
     padding: 20,
+    paddingTop: 80,
   },
   gridContainer: {
     flexDirection: 'row',

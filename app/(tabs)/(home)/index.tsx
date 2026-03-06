@@ -104,10 +104,17 @@ export default function HomeScreen() {
             backgroundColor: 'transparent',
           },
           headerTintColor: GlobalTextColour,
+          headerTitleStyle: {
+            color: GlobalTextColour,
+            textShadowColor: 'rgba(0, 0, 0, 0.75)',
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 4,
+          },
           headerLeft: () => (
             <TouchableOpacity
               style={styles.hamburgerButton}
-              onPress={() => handleOpenMenu()}
+              onPress={handleOpenMenu}
+              hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
             >
               <IconSymbol
                 ios_icon_name="line.horizontal.3"
@@ -167,7 +174,7 @@ export default function HomeScreen() {
           <View style={styles.counterContainer}>
             <TouchableOpacity
               style={styles.arrowButton}
-              onPress={() => handleLeftArrow()}
+              onPress={handleLeftArrow}
             >
               <IconSymbol
                 ios_icon_name="chevron.left"
@@ -182,7 +189,7 @@ export default function HomeScreen() {
                 styles.counterCircle,
                 { borderColor: GlobalTextColour },
               ]}
-              onPress={() => incrementCounter()}
+              onPress={incrementCounter}
             >
               <View style={styles.counterCircleArea}>
                 <Text
@@ -203,7 +210,7 @@ export default function HomeScreen() {
 
             <TouchableOpacity
               style={styles.arrowButton}
-              onPress={() => handleRightArrow()}
+              onPress={handleRightArrow}
             >
               <IconSymbol
                 ios_icon_name="chevron.right"
@@ -216,25 +223,25 @@ export default function HomeScreen() {
 
           <View style={styles.buttonRow}>
             <TouchableOpacity
-              style={styles.actionButton}
-              onPress={() => resetCounter()}
+              style={styles.frostedButton}
+              onPress={resetCounter}
             >
               <IconSymbol
                 ios_icon_name="arrow.clockwise"
                 android_material_icon_name="refresh"
-                size={28}
+                size={24}
                 color={GlobalTextColour}
               />
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={styles.actionButton}
-              onPress={() => decrementCounter()}
+              style={styles.frostedButton}
+              onPress={decrementCounter}
             >
               <IconSymbol
                 ios_icon_name="minus"
                 android_material_icon_name="remove"
-                size={28}
+                size={24}
                 color={GlobalTextColour}
               />
             </TouchableOpacity>
@@ -245,7 +252,7 @@ export default function HomeScreen() {
               styles.dhikrSelectorButton,
               { borderColor: GlobalTextColour },
             ]}
-            onPress={() => handleOpenDhikrSheet()}
+            onPress={handleOpenDhikrSheet}
           >
             <Text
               style={[
@@ -266,20 +273,20 @@ export default function HomeScreen() {
 
       <WarningModal
         visible={showWarning}
-        onClose={() => closeWarning()}
+        onClose={closeWarning}
         message="Slow down and focus on your Dhikr for maximum benefit"
       />
 
       <LeftSideMenu
         visible={menuVisible}
-        onClose={() => handleCloseMenu()}
+        onClose={handleCloseMenu}
         textColor={GlobalTextColour}
       />
 
       <DhikrBottomSheet
         visible={dhikrSheetVisible}
-        onClose={() => handleCloseDhikrSheet()}
-        onSelectDhikr={(index) => handleSelectDhikr(index)}
+        onClose={handleCloseDhikrSheet}
+        onSelectDhikr={handleSelectDhikr}
         activeDhikrIndex={activeDhikrIndex}
         textColor={GlobalTextColour}
         backgroundColor={typeof AppBackground === 'string' ? AppBackground : '#000000'}
@@ -305,6 +312,7 @@ export default function HomeScreen() {
     <ImageBackground
       source={resolveImageSource(AppBackground)}
       style={styles.container}
+      resizeMode="cover"
     >
       {renderContent()}
     </ImageBackground>
@@ -325,8 +333,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   hamburgerButton: {
-    padding: 8,
+    padding: 15,
     marginLeft: Platform.OS === 'android' ? 8 : 0,
+    zIndex: 999,
+    elevation: 999,
   },
   dhikrSection: {
     alignItems: 'center',
@@ -386,11 +396,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 30,
-    gap: 60,
+    gap: 40,
   },
-  actionButton: {
-    padding: 16,
-    backgroundColor: 'transparent',
+  frostedButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 20,
   },
   dhikrSelectorButton: {
     paddingHorizontal: 32,
