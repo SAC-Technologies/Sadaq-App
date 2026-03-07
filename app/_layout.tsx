@@ -5,96 +5,63 @@ import {
   Theme,
   ThemeProvider,
 } from "@react-navigation/native";
-import { useColorScheme, TouchableOpacity } from "react-native";
+import { useColorScheme } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { WidgetProvider } from "@/contexts/WidgetContext";
 import { ThemeProvider as TasbeehThemeProvider } from "@/contexts/ThemeContext";
 import { DhikrProvider } from "@/contexts/DhikrContext";
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { SystemBars } from "react-native-edge-to-edge";
 import "react-native-reanimated";
 import { useNetworkState } from "expo-network";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
-import { IconSymbol } from "@/components/IconSymbol";
-import LeftSideMenu from "@/components/LeftSideMenu";
 
 SplashScreen.preventAutoHideAsync();
 
 function NavigationContent() {
-  const [menuVisible, setMenuVisible] = useState(false);
-  const router = useRouter();
-
-  const handleOpenMenu = () => {
-    console.log('Hamburger menu button tapped from header');
-    setMenuVisible(true);
-  };
-
-  const handleCloseMenu = () => {
-    console.log('Left side menu closed');
-    setMenuVisible(false);
-  };
-
   return (
-    <>
-      <Stack
-        screenOptions={{
+    <Stack
+      screenOptions={{
+        headerShown: true,
+        headerTransparent: true,
+        headerStyle: { 
+          backgroundColor: 'rgba(0, 0, 0, 0.65)',
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+        headerShadowVisible: false,
+        headerBackVisible: true,
+      }}
+    >
+      <Stack.Screen 
+        name="(tabs)" 
+        options={{ 
           headerShown: false,
-          headerTransparent: true,
-          headerShadowVisible: false,
-          headerStyle: { 
-            backgroundColor: 'transparent',
-          },
-        }}
-      >
-        <Stack.Screen 
-          name="(tabs)" 
-          options={{ 
-            headerShown: false,
-          }} 
-        />
-        <Stack.Screen 
-          name="themes" 
-          options={{ 
-            animation: 'fade',
-            headerShown: true,
-            headerTransparent: true,
-            headerShadowVisible: false,
-            headerStyle: { 
-              backgroundColor: 'transparent',
-            },
-            headerTitle: '',
-            headerLeft: () => (
-              <TouchableOpacity
-                style={{ 
-                  padding: 15, 
-                  zIndex: 999, 
-                  elevation: 999,
-                }}
-                hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
-                onPress={handleOpenMenu}
-              >
-                <IconSymbol
-                  ios_icon_name="line.horizontal.3"
-                  android_material_icon_name="menu"
-                  size={24}
-                  color="#FFFFFF"
-                />
-              </TouchableOpacity>
-            ),
-          }} 
-        />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      
-      <LeftSideMenu
-        visible={menuVisible}
-        onClose={handleCloseMenu}
-        textColor="#FFFFFF"
+        }} 
       />
-    </>
+      <Stack.Screen 
+        name="themes" 
+        options={{ 
+          animation: 'fade',
+          headerShown: true,
+          headerTransparent: true,
+          headerStyle: { 
+            backgroundColor: 'rgba(0, 0, 0, 0.65)',
+            elevation: 0,
+            shadowOpacity: 0,
+            borderBottomWidth: 0,
+          },
+          headerShadowVisible: false,
+          headerBackVisible: true,
+          headerTitle: 'Themes',
+        }} 
+      />
+      <Stack.Screen name="+not-found" />
+    </Stack>
   );
 }
 
