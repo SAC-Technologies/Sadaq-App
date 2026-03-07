@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { IconSymbol } from '@/components/IconSymbol';
 import { BlurView } from 'expo-blur';
-import { useRouter, usePathname } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 interface MenuItem {
   id: string;
@@ -68,27 +68,16 @@ export default function LeftSideMenu({
   textColor,
 }: LeftSideMenuProps) {
   const router = useRouter();
-  const pathname = usePathname();
 
   const handleMenuItemPress = (item: MenuItem) => {
     console.log('Menu item tapped:', item.label);
     
     if (item.route) {
-      const currentPath = pathname;
-      console.log('Current path:', currentPath, 'Target route:', item.route);
-      
-      if (currentPath === item.route) {
-        console.log('Already on this route, just closing menu');
-        onClose();
-        return;
-      }
-      
       console.log('Navigating to route:', item.route);
       router.push(item.route);
       onClose();
     } else {
       console.log('No route defined for:', item.label);
-      onClose();
     }
   };
 
@@ -99,7 +88,7 @@ export default function LeftSideMenu({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <Pressable style={styles.overlay} onPress={onClose}>
+      <Pressable style={styles.overlay} onPress={() => onClose()}>
         <Pressable
           style={styles.menuContainer}
           onPress={(e) => e.stopPropagation()}

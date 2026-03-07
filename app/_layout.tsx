@@ -21,50 +21,6 @@ import { useFonts } from "expo-font";
 
 SplashScreen.preventAutoHideAsync();
 
-function NavigationContent() {
-  return (
-    <Stack
-      screenOptions={{
-        headerShown: true,
-        headerTransparent: true,
-        headerStyle: { 
-          backgroundColor: 'rgba(0, 0, 0, 0.65)',
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-        },
-        headerShadowVisible: false,
-        headerBackVisible: true,
-      }}
-    >
-      <Stack.Screen 
-        name="(tabs)" 
-        options={{ 
-          headerShown: false,
-        }} 
-      />
-      <Stack.Screen 
-        name="themes" 
-        options={{ 
-          animation: 'fade',
-          headerShown: true,
-          headerTransparent: true,
-          headerStyle: { 
-            backgroundColor: 'rgba(0, 0, 0, 0.65)',
-            elevation: 0,
-            shadowOpacity: 0,
-            borderBottomWidth: 0,
-          },
-          headerShadowVisible: false,
-          headerBackVisible: true,
-          headerTitle: 'Themes',
-        }} 
-      />
-      <Stack.Screen name="+not-found" />
-    </Stack>
-  );
-}
-
 export default function RootLayout() {
   const { isConnected } = useNetworkState();
   const [loaded] = useFonts({
@@ -86,8 +42,8 @@ export default function RootLayout() {
     ...DarkTheme,
     colors: {
       ...DarkTheme.colors,
-      background: "#000000",
-      card: "#1E1E1E",
+      background: "#000080",
+      card: "#1E1E8F",
       text: "#FFFFFF",
       border: "#FFFFFF",
       primary: "#4169E1",
@@ -98,8 +54,8 @@ export default function RootLayout() {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: "#000000",
-      card: "#1E1E1E",
+      background: "#000080",
+      card: "#1E1E8F",
       text: "#FFFFFF",
       border: "#FFFFFF",
       primary: "#4169E1",
@@ -113,7 +69,15 @@ export default function RootLayout() {
           <WidgetProvider>
             <ThemeProvider value={colorScheme === "dark" ? customDarkTheme : customLightTheme}>
               <SystemBars style="light" />
-              <NavigationContent />
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                }}
+              >
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="themes" options={{ animation: 'fade' }} />
+                <Stack.Screen name="+not-found" />
+              </Stack>
               <StatusBar style="light" />
             </ThemeProvider>
           </WidgetProvider>
