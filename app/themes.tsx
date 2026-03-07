@@ -32,6 +32,7 @@ export default function ThemesScreen() {
       headerTintColor: activeTheme.textColor,
       title: 'Themes',
       headerBackTitleVisible: false,
+      headerBackTitle: '',
     });
   }, [navigation, activeTheme]);
 

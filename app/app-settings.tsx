@@ -33,6 +33,7 @@ export default function AppSettingsScreen() {
       headerTintColor: activeTheme.textColor,
       title: 'App Settings',
       headerBackTitleVisible: false,
+      headerBackTitle: '',
     });
   }, [navigation, activeTheme]);
 
