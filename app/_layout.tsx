@@ -9,6 +9,7 @@ import { useColorScheme } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { WidgetProvider } from "@/contexts/WidgetContext";
 import { ThemeProvider as TasbeehThemeProvider } from "@/contexts/ThemeContext";
+import { SettingsProvider } from "@/contexts/SettingsContext";
 import { DhikrProvider } from "@/contexts/DhikrContext";
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -65,23 +66,26 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <TasbeehThemeProvider>
-        <DhikrProvider>
-          <WidgetProvider>
-            <ThemeProvider value={colorScheme === "dark" ? customDarkTheme : customLightTheme}>
-              <SystemBars style="light" />
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                }}
-              >
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="themes" options={{ headerShown: false }} />
-                <Stack.Screen name="+not-found" />
-              </Stack>
-              <StatusBar style="light" />
-            </ThemeProvider>
-          </WidgetProvider>
-        </DhikrProvider>
+        <SettingsProvider>
+          <DhikrProvider>
+            <WidgetProvider>
+              <ThemeProvider value={colorScheme === "dark" ? customDarkTheme : customLightTheme}>
+                <SystemBars style="light" />
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                  }}
+                >
+                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                  <Stack.Screen name="themes" options={{ headerShown: false }} />
+                  <Stack.Screen name="app-settings" options={{ headerShown: false }} />
+                  <Stack.Screen name="+not-found" />
+                </Stack>
+                <StatusBar style="light" />
+              </ThemeProvider>
+            </WidgetProvider>
+          </DhikrProvider>
+        </SettingsProvider>
       </TasbeehThemeProvider>
     </GestureHandlerRootView>
   );

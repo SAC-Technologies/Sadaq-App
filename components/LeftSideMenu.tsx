@@ -74,6 +74,9 @@ export default function LeftSideMenu({
     } else if (itemLabel === 'Themes') {
       router.navigate('/themes');
       onClose();
+    } else if (itemLabel === 'App Settings') {
+      router.navigate('/app-settings');
+      onClose();
     }
   };
 
