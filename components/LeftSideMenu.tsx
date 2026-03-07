@@ -80,9 +80,10 @@ export default function LeftSideMenu({
 
       console.log('Current route:', currentRoute, 'Target route:', targetRoute);
 
-      // If already on the target screen, just close the menu
+      // CRITICAL: "Stay Put" Logic - If already on the target screen, ONLY close the drawer
+      // Do NOT call push, replace, or any navigation function to prevent flickering
       if (currentRoute === targetRoute || currentRoute.startsWith(targetRoute)) {
-        console.log('Already on target screen, closing menu');
+        console.log('Already on target screen, closing menu without navigation');
         onClose();
         return;
       }
@@ -90,7 +91,7 @@ export default function LeftSideMenu({
       // Navigate to the target screen
       if (targetRoute === '/(tabs)/(home)') {
         // If navigating to Home from Themes, use replace to avoid stacking
-        console.log('Navigating to Home');
+        console.log('Navigating to Home with replace');
         router.replace('/(tabs)/(home)');
       } else {
         console.log('Navigating to:', targetRoute);

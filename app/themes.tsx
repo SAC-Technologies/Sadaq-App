@@ -1,5 +1,5 @@
 
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,8 @@ import { Stack, useRouter, useNavigation } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { IconSymbol } from '@/components/IconSymbol';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { DrawerActions } from '@react-navigation/native';
+import LeftSideMenu from '@/components/LeftSideMenu';
 
 // Helper to resolve image sources (handles both local require() and remote URLs)
 function resolveImageSource(source: string | number | ImageSourcePropType | undefined): ImageSourcePropType {
@@ -26,12 +28,14 @@ export default function ThemesScreen() {
   const { activeTheme, changeTheme, themes } = useTheme();
   const router = useRouter();
   const navigation = useNavigation();
+  const [menuVisible, setMenuVisible] = useState(false);
 
   console.log('ThemesScreen loaded with active theme:', activeTheme.name);
 
   // Safe header sync using useLayoutEffect
   useLayoutEffect(() => {
     navigation.setOptions({
+      title: 'Themes',
       headerStyle: {
         backgroundColor: activeTheme.headerColor,
       },
@@ -45,8 +49,7 @@ export default function ThemesScreen() {
           style={styles.hamburgerButton}
           onPress={() => {
             console.log('Hamburger menu button tapped from ThemesScreen');
-            // TODO: Open drawer - will be wired in LeftSideMenu
-            router.back();
+            setMenuVisible(true);
           }}
         >
           <IconSymbol
@@ -58,11 +61,16 @@ export default function ThemesScreen() {
         </TouchableOpacity>
       ),
     });
-  }, [navigation, activeTheme, router]);
+  }, [navigation, activeTheme]);
 
   const handleThemeSelect = (themeId: string) => {
     console.log('User selected theme:', themeId);
     changeTheme(themeId);
+  };
+
+  const handleCloseMenu = () => {
+    console.log('Left side menu closed from ThemesScreen');
+    setMenuVisible(false);
   };
 
   const renderContent = () => (
@@ -137,6 +145,12 @@ export default function ThemesScreen() {
           </View>
         </ScrollView>
       </SafeAreaView>
+
+      <LeftSideMenu
+        visible={menuVisible}
+        onClose={handleCloseMenu}
+        textColor={activeTheme.textColor}
+      />
     </>
   );
 

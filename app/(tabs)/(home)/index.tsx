@@ -120,7 +120,7 @@ export default function HomeScreen() {
         activeTheme.bgType === 'color' && { backgroundColor: activeTheme.bgValue as string },
       ]}
     >
-      <View style={[StyleSheet.absoluteFillObject, styles.overlay]} />
+      {/* REMOVED: Dark overlay on Home screen only */}
 
       <SafeAreaView style={styles.safeArea} edges={['bottom']}>
         <View style={styles.content}>
@@ -278,9 +278,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-  },
   safeArea: {
     flex: 1,
   },
@@ -361,8 +358,11 @@ const styles = StyleSheet.create({
   },
   frostedButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    borderRadius: 15,
-    padding: 10,
+    borderRadius: 25,
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   actionButton: {
     justifyContent: 'center',
