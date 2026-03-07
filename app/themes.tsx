@@ -7,20 +7,11 @@ import {
   StyleSheet,
   ScrollView,
   ImageBackground,
-  Image,
-  ImageSourcePropType,
 } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { IconSymbol } from '@/components/IconSymbol';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-// Helper to resolve image sources (handles both local require() and remote URLs)
-function resolveImageSource(source: string | number | ImageSourcePropType | undefined): ImageSourcePropType {
-  if (!source) return { uri: '' };
-  if (typeof source === 'string') return { uri: source };
-  return source as ImageSourcePropType;
-}
 
 export default function ThemesScreen() {
   const { activeTheme, changeTheme, themes } = useTheme();
@@ -47,7 +38,7 @@ export default function ThemesScreen() {
           headerShown: true,
           title: 'Select Theme',
           headerStyle: {
-            backgroundColor: typeof AppBackground === 'string' ? AppBackground : 'transparent',
+            backgroundColor: AppBackground,
           },
           headerTintColor: GlobalTextColour,
           headerLeft: () => (
@@ -72,38 +63,24 @@ export default function ThemesScreen() {
           contentContainerStyle={styles.scrollContent}
         >
           <View style={styles.gridContainer}>
-            {themes.map((theme) => {
+            {themes.map((theme, index) => {
               const isActive = theme.id === activeTheme.id;
+              const previewBgColor = theme.bgValue;
               const themeName = theme.name;
 
               return (
                 <React.Fragment key={theme.id}>
                   <View style={styles.themeCard}>
-                    {/* Conditionally render preview based on bgType */}
-                    {theme.bgType === 'color' ? (
-                      <View
-                        style={[
-                          styles.previewBox,
-                          { backgroundColor: theme.bgValue as string },
-                          isActive && {
-                            borderWidth: 4,
-                            borderColor: GlobalTextColour,
-                          },
-                        ]}
-                      />
-                    ) : (
-                      <Image
-                        source={resolveImageSource(theme.bgValue)}
-                        style={[
-                          styles.previewImage,
-                          isActive && {
-                            borderWidth: 4,
-                            borderColor: GlobalTextColour,
-                          },
-                        ]}
-                        resizeMode="cover"
-                      />
-                    )}
+                    <View
+                      style={[
+                        styles.previewBox,
+                        { backgroundColor: previewBgColor },
+                        isActive && {
+                          borderWidth: 4,
+                          borderColor: GlobalTextColour,
+                        },
+                      ]}
+                    />
                     <Text
                       style={[
                         styles.themeName,
@@ -143,7 +120,7 @@ export default function ThemesScreen() {
       <View
         style={[
           styles.container,
-          { backgroundColor: AppBackground as string },
+          { backgroundColor: AppBackground },
         ]}
       >
         {renderContent()}
@@ -153,7 +130,7 @@ export default function ThemesScreen() {
 
   return (
     <ImageBackground
-      source={resolveImageSource(AppBackground)}
+      source={{ uri: AppBackground }}
       style={styles.container}
     >
       {renderContent()}
@@ -188,12 +165,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   previewBox: {
-    width: '100%',
-    height: 120,
-    borderRadius: 12,
-    marginBottom: 12,
-  },
-  previewImage: {
     width: '100%',
     height: 120,
     borderRadius: 12,
