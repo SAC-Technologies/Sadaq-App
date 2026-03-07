@@ -1,94 +1,44 @@
 
-import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-export interface Theme {
-  id: string;
-  name: string;
-  bgType: 'color' | 'image';
-  bgValue: string | number;
-  textColor: string;
-  isPremium: boolean;
-  price: string | null;
+interface ThemeConfig {
+  AppBackground: string;
+  GlobalTextColour: string;
+  CounterArrowColour: string;
 }
 
 interface ThemeContextType {
-  activeTheme: Theme;
-  changeTheme: (themeId: string) => void;
-  themes: Theme[];
+  currentTheme: ThemeConfig;
+  setTheme: (theme: ThemeConfig) => void;
 }
 
-const THEMES: Theme[] = [
-  {
-    id: 'default',
-    name: 'Default',
-    bgType: 'color',
-    bgValue: '#A4CFDB',
-    textColor: '#FFFFFF',
-    isPremium: false,
-    price: null,
-  },
-  {
-    id: 'ottoman',
-    name: 'Ottoman',
-    bgType: 'image',
-    bgValue: require('../assets/images/ada424d2-bf03-4978-a567-4a2e3fbf171a.jpeg'),
-    textColor: '#FFFFFF',
-    isPremium: false,
-    price: null,
-  },
-  {
-    id: 'alaouite',
-    name: 'Alaouite',
-    bgType: 'image',
-    bgValue: require('../assets/images/03dfebd5-eb8c-4535-ab85-4d79ad385307.jpeg'),
-    textColor: '#FDF8E4',
-    isPremium: false,
-    price: null,
-  },
-];
+const defaultTheme: ThemeConfig = {
+  AppBackground: '#000080',
+  GlobalTextColour: '#FFFFFF',
+  CounterArrowColour: '#FFFFFF',
+};
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [activeTheme, setActiveTheme] = useState<Theme>(THEMES[0]);
+  const [currentTheme, setCurrentTheme] = useState<ThemeConfig>(defaultTheme);
 
-  const changeTheme = useCallback((themeId: string) => {
-    console.log('Changing theme to:', themeId);
-    const newTheme = THEMES.find((theme) => theme.id === themeId);
-    if (newTheme) {
-      setActiveTheme(newTheme);
-      console.log('Theme changed successfully:', newTheme.name);
-    } else {
-      console.warn('Theme not found:', themeId);
-    }
-  }, []);
+  const setTheme = (theme: ThemeConfig) => {
+    console.log('Theme changed:', theme);
+    setCurrentTheme(theme);
+  };
 
   return (
-    <ThemeContext.Provider value={{ activeTheme, changeTheme, themes: THEMES }}>
+    <ThemeContext.Provider value={{ currentTheme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );
 }
 
-export function useTheme() {
+export function useThemeConfig() {
   const context = useContext(ThemeContext);
   if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    throw new Error('useThemeConfig must be used within a ThemeProvider');
   }
   return context;
-}
-
-// Legacy hook for backward compatibility with existing code
-export function useThemeConfig() {
-  const { activeTheme } = useTheme();
-  return {
-    currentTheme: {
-      AppBackground: activeTheme.bgValue,
-      GlobalTextColour: activeTheme.textColor,
-      CounterArrowColour: activeTheme.textColor,
-    },
-    setTheme: () => {
-      console.warn('setTheme is deprecated. Use changeTheme from useTheme hook instead.');
-    },
-  };
 }

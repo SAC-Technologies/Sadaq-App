@@ -7,11 +7,10 @@ import {
   TouchableOpacity,
   Pressable,
   Platform,
-  ImageBackground,
 } from 'react-native';
 import { Stack } from 'expo-router';
 import { IconSymbol } from '@/components/IconSymbol';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useThemeConfig } from '@/contexts/ThemeContext';
 import { useDhikr } from '@/contexts/DhikrContext';
 import { useCounter } from '@/hooks/useCounter';
 import WarningModal from '@/components/WarningModal';
@@ -19,17 +18,8 @@ import LeftSideMenu from '@/components/LeftSideMenu';
 import DhikrBottomSheet from '@/components/DhikrBottomSheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// Helper to resolve image sources (handles both local require() and remote URLs)
-function resolveImageSource(source: string | number | undefined): any {
-  if (!source) return { uri: '' };
-  if (typeof source === 'string') return { uri: source };
-  return source;
-}
-
 export default function HomeScreen() {
-  const { activeTheme } = useTheme();
-  const GlobalTextColour = activeTheme.textColor;
-
+  const { currentTheme } = useThemeConfig();
   const {
     activeDhikrIndex,
     activeDhikr,
@@ -54,12 +44,6 @@ export default function HomeScreen() {
   const dhikrTransliteration = activeDhikr.Transliteration;
   const dhikrMeaning = activeDhikr.Meaning;
   const dhikrSelectorText = activeDhikr.DhikrSelectorText;
-
-  const textShadowStyle = {
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 4,
-  };
 
   const handleOpenMenu = () => {
     console.log('Hamburger menu button tapped');
@@ -96,17 +80,21 @@ export default function HomeScreen() {
     selectDhikr(index, counterValue);
   };
 
-  const renderContent = () => (
-    <>
+  return (
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: currentTheme.AppBackground },
+      ]}
+    >
       <Stack.Screen
         options={{
           headerShown: true,
           title: 'Digital Tasbeeh',
-          headerTransparent: true,
           headerStyle: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            backgroundColor: currentTheme.AppBackground,
           },
-          headerTintColor: GlobalTextColour,
+          headerTintColor: currentTheme.GlobalTextColour,
           headerLeft: () => (
             <TouchableOpacity
               style={styles.hamburgerButton}
@@ -116,7 +104,7 @@ export default function HomeScreen() {
                 ios_icon_name="line.horizontal.3"
                 android_material_icon_name="menu"
                 size={24}
-                color={GlobalTextColour}
+                color={currentTheme.GlobalTextColour}
               />
             </TouchableOpacity>
           ),
@@ -129,8 +117,7 @@ export default function HomeScreen() {
             <Text
               style={[
                 styles.dhikrArabic,
-                { color: GlobalTextColour },
-                textShadowStyle,
+                { color: currentTheme.GlobalTextColour },
               ]}
             >
               {dhikrArabic}
@@ -138,8 +125,7 @@ export default function HomeScreen() {
             <Text
               style={[
                 styles.dhikrTransliteration,
-                { color: GlobalTextColour },
-                textShadowStyle,
+                { color: currentTheme.GlobalTextColour },
               ]}
             >
               {dhikrTransliteration}
@@ -147,8 +133,7 @@ export default function HomeScreen() {
             <Text
               style={[
                 styles.dhikrMeaning,
-                { color: GlobalTextColour },
-                textShadowStyle,
+                { color: currentTheme.GlobalTextColour },
               ]}
             >
               {dhikrMeaning}
@@ -164,14 +149,14 @@ export default function HomeScreen() {
                 ios_icon_name="chevron.left"
                 android_material_icon_name="chevron-left"
                 size={32}
-                color={GlobalTextColour}
+                color={currentTheme.CounterArrowColour}
               />
             </TouchableOpacity>
 
             <Pressable
               style={[
                 styles.counterCircle,
-                { borderColor: GlobalTextColour },
+                { borderColor: currentTheme.GlobalTextColour },
               ]}
               onPress={() => incrementCounter()}
             >
@@ -179,8 +164,7 @@ export default function HomeScreen() {
                 <Text
                   style={[
                     styles.counterValue,
-                    { color: GlobalTextColour },
-                    textShadowStyle,
+                    { color: currentTheme.GlobalTextColour },
                   ]}
                 >
                   {formattedCounterValue}
@@ -196,7 +180,7 @@ export default function HomeScreen() {
                 ios_icon_name="chevron.right"
                 android_material_icon_name="chevron-right"
                 size={32}
-                color={GlobalTextColour}
+                color={currentTheme.CounterArrowColour}
               />
             </TouchableOpacity>
           </View>
@@ -210,7 +194,7 @@ export default function HomeScreen() {
                 ios_icon_name="arrow.clockwise"
                 android_material_icon_name="refresh"
                 size={28}
-                color={GlobalTextColour}
+                color={currentTheme.GlobalTextColour}
               />
             </TouchableOpacity>
 
@@ -222,7 +206,7 @@ export default function HomeScreen() {
                 ios_icon_name="minus"
                 android_material_icon_name="remove"
                 size={28}
-                color={GlobalTextColour}
+                color={currentTheme.GlobalTextColour}
               />
             </TouchableOpacity>
           </View>
@@ -230,15 +214,14 @@ export default function HomeScreen() {
           <TouchableOpacity
             style={[
               styles.dhikrSelectorButton,
-              { borderColor: GlobalTextColour },
+              { borderColor: currentTheme.GlobalTextColour },
             ]}
             onPress={() => handleOpenDhikrSheet()}
           >
             <Text
               style={[
                 styles.dhikrSelectorText,
-                { color: GlobalTextColour },
-                textShadowStyle,
+                { color: currentTheme.GlobalTextColour },
               ]}
             >
               {dhikrSelectorText}
@@ -256,7 +239,7 @@ export default function HomeScreen() {
       <LeftSideMenu
         visible={menuVisible}
         onClose={() => handleCloseMenu()}
-        textColor={GlobalTextColour}
+        textColor={currentTheme.GlobalTextColour}
       />
 
       <DhikrBottomSheet
@@ -264,34 +247,10 @@ export default function HomeScreen() {
         onClose={() => handleCloseDhikrSheet()}
         onSelectDhikr={(index) => handleSelectDhikr(index)}
         activeDhikrIndex={activeDhikrIndex}
-        textColor={GlobalTextColour}
-        backgroundColor={activeTheme.bgValue}
-        bgType={activeTheme.bgType}
+        textColor={currentTheme.GlobalTextColour}
+        backgroundColor={currentTheme.AppBackground}
       />
-    </>
-  );
-
-  if (activeTheme.bgType === 'color') {
-    return (
-      <View
-        style={[
-          styles.container,
-          { backgroundColor: activeTheme.bgValue as string },
-        ]}
-      >
-        {renderContent()}
-      </View>
-    );
-  }
-
-  return (
-    <ImageBackground
-      source={resolveImageSource(activeTheme.bgValue)}
-      style={styles.container}
-      resizeMode="cover"
-    >
-      {renderContent()}
-    </ImageBackground>
+    </View>
   );
 }
 
