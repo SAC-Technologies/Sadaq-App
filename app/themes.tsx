@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import {
   View,
   Text,
@@ -8,23 +8,31 @@ import {
   ScrollView,
   ImageBackground,
   Image,
+  ImageSourcePropType,
 } from 'react-native';
-import { Stack, useRouter } from 'expo-router';
+import { Stack, useNavigation } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
-import { IconSymbol } from '@/components/IconSymbol';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// Helper to resolve image sources (handles both local require() and remote URLs)
-function resolveImageSource(source: string | number | undefined): any {
+function resolveImageSource(source: string | number | ImageSourcePropType | undefined): ImageSourcePropType {
   if (!source) return { uri: '' };
   if (typeof source === 'string') return { uri: source };
-  return source;
+  return source as ImageSourcePropType;
 }
 
 export default function ThemesScreen() {
+  const navigation = useNavigation();
   const { activeTheme, changeTheme, themes } = useTheme();
-  const router = useRouter();
-  const GlobalTextColour = activeTheme.textColor;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: activeTheme.headerColor,
+      },
+      headerTintColor: activeTheme.textColor,
+      title: 'Themes',
+    });
+  }, [navigation, activeTheme]);
 
   console.log('ThemesScreen loaded with active theme:', activeTheme.name);
 
@@ -33,37 +41,27 @@ export default function ThemesScreen() {
     changeTheme(themeId);
   };
 
-  const handleBackPress = () => {
-    console.log('Back button pressed from ThemesScreen');
-    router.back();
-  };
+  const BackgroundComponent = activeTheme.bgType === 'image' ? ImageBackground : View;
+  const backgroundProps = activeTheme.bgType === 'image' 
+    ? { source: resolveImageSource(activeTheme.bgValue), resizeMode: 'cover' as const }
+    : {};
 
-  const renderContent = () => (
-    <>
+  return (
+    <BackgroundComponent
+      {...backgroundProps}
+      style={[
+        styles.container,
+        activeTheme.bgType === 'color' && { backgroundColor: activeTheme.bgValue as string },
+      ]}
+    >
       <Stack.Screen
         options={{
           headerShown: true,
-          title: 'Select Theme',
-          headerTransparent: true,
-          headerStyle: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          },
-          headerTintColor: GlobalTextColour,
-          headerLeft: () => (
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={() => handleBackPress()}
-            >
-              <IconSymbol
-                ios_icon_name="chevron.left"
-                android_material_icon_name="arrow-back"
-                size={24}
-                color={GlobalTextColour}
-              />
-            </TouchableOpacity>
-          ),
+          title: 'Themes',
         }}
       />
+
+      <View style={styles.overlay} />
 
       <SafeAreaView style={styles.safeArea} edges={['bottom']}>
         <ScrollView
@@ -76,88 +74,62 @@ export default function ThemesScreen() {
               const themeName = theme.name;
 
               return (
-                <React.Fragment key={theme.id}>
-                  <View style={styles.themeCard}>
-                    {theme.bgType === 'color' ? (
-                      <View
-                        style={[
-                          styles.previewBox,
-                          { backgroundColor: theme.bgValue as string },
-                          isActive && {
-                            borderWidth: 4,
-                            borderColor: GlobalTextColour,
-                          },
-                        ]}
-                      />
-                    ) : (
-                      <Image
-                        source={resolveImageSource(theme.bgValue)}
-                        style={[
-                          styles.previewBox,
-                          isActive && {
-                            borderWidth: 4,
-                            borderColor: GlobalTextColour,
-                          },
-                        ]}
-                        resizeMode="cover"
-                      />
-                    )}
+                <View key={theme.id} style={styles.themeCard}>
+                  {theme.bgType === 'color' ? (
+                    <View
+                      style={[
+                        styles.previewBox,
+                        { backgroundColor: theme.bgValue as string },
+                        isActive && {
+                          borderWidth: 4,
+                          borderColor: activeTheme.textColor,
+                        },
+                      ]}
+                    />
+                  ) : (
+                    <Image
+                      source={resolveImageSource(theme.bgValue)}
+                      style={[
+                        styles.previewBox,
+                        isActive && {
+                          borderWidth: 4,
+                          borderColor: activeTheme.textColor,
+                        },
+                      ]}
+                      resizeMode="cover"
+                    />
+                  )}
+                  <Text
+                    style={[
+                      styles.themeName,
+                      { color: activeTheme.textColor },
+                    ]}
+                  >
+                    {themeName}
+                  </Text>
+                  <TouchableOpacity
+                    style={[
+                      styles.selectButton,
+                      { backgroundColor: activeTheme.textColor },
+                    ]}
+                    onPress={() => handleThemeSelect(theme.id)}
+                  >
                     <Text
                       style={[
-                        styles.themeName,
-                        { color: GlobalTextColour },
+                        styles.selectButtonText,
+                        { color: activeTheme.headerColor },
                       ]}
                     >
-                      {themeName}
+                      Use
                     </Text>
-                    <TouchableOpacity
-                      style={[
-                        styles.selectButton,
-                        { borderColor: GlobalTextColour },
-                      ]}
-                      onPress={() => handleThemeSelect(theme.id)}
-                    >
-                      <Text
-                        style={[
-                          styles.selectButtonText,
-                          { color: GlobalTextColour },
-                        ]}
-                      >
-                        Use
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </React.Fragment>
+                  </TouchableOpacity>
+                </View>
               );
             })}
           </View>
         </ScrollView>
       </SafeAreaView>
-    </>
-  );
-
-  if (activeTheme.bgType === 'color') {
-    return (
-      <View
-        style={[
-          styles.container,
-          { backgroundColor: activeTheme.bgValue as string },
-        ]}
-      >
-        {renderContent()}
-      </View>
-    );
-  }
-
-  return (
-    <ImageBackground
-      source={resolveImageSource(activeTheme.bgValue)}
-      style={[styles.container, { backgroundColor: '#000000' }]}
-      resizeMode="cover"
-    >
-      <View style={styles.overlay} />
-      {renderContent()}
-    </ImageBackground>
+    </BackgroundComponent>
   );
 }
 
@@ -167,20 +139,17 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   safeArea: {
     flex: 1,
-  },
-  backButton: {
-    padding: 8,
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
     padding: 20,
-    paddingTop: 100,
+    paddingTop: 20,
   },
   gridContainer: {
     flexDirection: 'row',
@@ -203,13 +172,14 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 8,
     textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 4,
   },
   selectButton: {
     paddingHorizontal: 24,
     paddingVertical: 8,
     borderRadius: 8,
-    borderWidth: 2,
-    backgroundColor: 'transparent',
   },
   selectButtonText: {
     fontSize: 14,

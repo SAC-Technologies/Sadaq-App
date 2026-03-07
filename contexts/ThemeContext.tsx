@@ -11,6 +11,7 @@ export interface Theme {
   headerColor: string;
   isPremium: boolean;
   price: string | null;
+  overlayOpacity: number;
 }
 
 const themes: Theme[] = [
@@ -23,26 +24,29 @@ const themes: Theme[] = [
     headerColor: '#A4CFDB',
     isPremium: false,
     price: null,
+    overlayOpacity: 0,
   },
   {
     id: 'ottoman',
     name: 'Ottoman',
     bgType: 'image',
-    bgValue: require('../assets/images/d0075963-5877-45d0-b52c-ce99f1b0c60a.jpeg'),
+    bgValue: require('../assets/images/ada424d2-bf03-4978-a567-4a2e3fbf171a.jpeg'),
     textColor: '#FFFFFF',
     headerColor: '#1A4E91',
     isPremium: false,
     price: null,
+    overlayOpacity: 0.15,
   },
   {
     id: 'alaouite',
     name: 'Alaouite',
     bgType: 'image',
-    bgValue: require('../assets/images/f9ae6fa3-9dc9-4e3d-930b-68519bdae7ba.jpeg'),
+    bgValue: require('../assets/images/03dfebd5-eb8c-4535-ab85-4d79ad385307.jpeg'),
     textColor: '#FDF8E4',
     headerColor: '#0D2B26',
     isPremium: false,
     price: null,
+    overlayOpacity: 0,
   },
 ];
 

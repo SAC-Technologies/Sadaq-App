@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { IconSymbol } from '@/components/IconSymbol';
 import { BlurView } from 'expo-blur';
+import { useRouter } from 'expo-router';
 
 interface MenuItem {
   id: string;
@@ -63,8 +64,17 @@ export default function LeftSideMenu({
   onClose,
   textColor,
 }: LeftSideMenuProps) {
+  const router = useRouter();
+
   const handleMenuItemPress = (itemLabel: string) => {
     console.log('Menu item tapped:', itemLabel);
+    
+    if (itemLabel === 'Home') {
+      onClose();
+    } else if (itemLabel === 'Themes') {
+      router.navigate('/themes');
+      onClose();
+    }
   };
 
   return (

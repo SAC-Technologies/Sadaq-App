@@ -41,20 +41,13 @@ export default function DhikrBottomSheet({
       animationType="slide"
       onRequestClose={onClose}
     >
-      {/* The Backdrop */}
       <View style={styles.backdrop}>
         <Pressable style={styles.backdropPressable} onPress={onClose} />
         
-        {/* The Container (Bottom Sheet View) */}
         <View style={styles.container}>
-          
-          {/* The Header: Drag-indicator pill */}
           <View style={styles.dragIndicator} />
           
-          {/* The Scroll Layout */}
           <ScrollView style={styles.scrollContainer}>
-            
-            {/* The Buttons (Single Column Pills) */}
             {DhikrList.map((dhikr, index) => {
               const optionText = dhikr.DhikrSelectorText;
               
@@ -64,7 +57,6 @@ export default function DhikrBottomSheet({
                   style={styles.pillButton}
                   onPress={() => handleSelectDhikr(index)}
                 >
-                  {/* Text Styling */}
                   <Text style={[styles.pillText, { color: textColor }]}>
                     {optionText}
                   </Text>
@@ -79,11 +71,10 @@ export default function DhikrBottomSheet({
 }
 
 const styles = StyleSheet.create({
-  // The Backdrop
   backdrop: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: 'transparent',
   },
   backdropPressable: {
     position: 'absolute',
@@ -92,7 +83,6 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  // The Container (Bottom Sheet View)
   container: {
     height: 450,
     borderTopLeftRadius: 30,
@@ -100,7 +90,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
-  // The Header: Drag-indicator pill
   dragIndicator: {
     width: 40,
     height: 5,
@@ -109,11 +98,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 20,
   },
-  // The Scroll Layout
   scrollContainer: {
     flex: 1,
   },
-  // Button Styling (Single Column Pills)
   pillButton: {
     borderRadius: 20,
     backgroundColor: 'rgba(255, 255, 255, 0.10)',
@@ -122,7 +109,6 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderBottomWidth: 0,
   },
-  // Text Styling
   pillText: {
     fontSize: 18,
     textAlign: 'center',

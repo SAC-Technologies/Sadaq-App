@@ -57,6 +57,7 @@ export default function HomeScreen() {
   const dhikrTransliteration = activeDhikr.Transliteration;
   const dhikrMeaning = activeDhikr.Meaning;
   const dhikrSelectorText = activeDhikr.DhikrSelectorText;
+  const overlayColor = `rgba(0, 0, 0, ${activeTheme.overlayOpacity})`;
 
   const handleOpenMenu = () => {
     console.log('Hamburger menu button tapped');
@@ -126,7 +127,7 @@ export default function HomeScreen() {
         }}
       />
 
-      <View style={[StyleSheet.absoluteFillObject, styles.overlay]} />
+      <View style={[StyleSheet.absoluteFillObject, { backgroundColor: overlayColor }]} />
 
       <SafeAreaView style={styles.safeArea} edges={['bottom']}>
         <View style={styles.content}>
@@ -284,9 +285,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-  },
   safeArea: {
     flex: 1,
   },
@@ -365,9 +363,12 @@ const styles = StyleSheet.create({
     gap: 60,
   },
   frostedButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    borderRadius: 15,
-    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   actionButton: {
     justifyContent: 'center',
