@@ -41,11 +41,11 @@ export default function DhikrBottomSheet({
       animationType="slide"
       onRequestClose={onClose}
     >
-      {/* The Backdrop - Changed to transparent */}
+      {/* The Backdrop */}
       <View style={styles.backdrop}>
         <Pressable style={styles.backdropPressable} onPress={onClose} />
         
-        {/* The Container (Bottom Sheet View) - Solid dark background */}
+        {/* The Container (Bottom Sheet View) */}
         <View style={styles.container}>
           
           {/* The Header: Drag-indicator pill */}
@@ -79,11 +79,11 @@ export default function DhikrBottomSheet({
 }
 
 const styles = StyleSheet.create({
-  // The Backdrop - Changed to transparent
+  // The Backdrop
   backdrop: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   backdropPressable: {
     position: 'absolute',
@@ -92,13 +92,13 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  // The Container (Bottom Sheet View) - Solid dark background
+  // The Container (Bottom Sheet View)
   container: {
     height: 450,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
   // The Header: Drag-indicator pill
   dragIndicator: {

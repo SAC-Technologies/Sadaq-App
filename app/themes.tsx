@@ -1,5 +1,5 @@
 
-import React, { useLayoutEffect, useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -8,73 +8,63 @@ import {
   ScrollView,
   ImageBackground,
   Image,
-  ImageSourcePropType,
 } from 'react-native';
-import { Stack, useRouter, useNavigation } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { IconSymbol } from '@/components/IconSymbol';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { DrawerActions } from '@react-navigation/native';
-import LeftSideMenu from '@/components/LeftSideMenu';
 
 // Helper to resolve image sources (handles both local require() and remote URLs)
-function resolveImageSource(source: string | number | ImageSourcePropType | undefined): ImageSourcePropType {
+function resolveImageSource(source: string | number | undefined): any {
   if (!source) return { uri: '' };
   if (typeof source === 'string') return { uri: source };
-  return source as ImageSourcePropType;
+  return source;
 }
 
 export default function ThemesScreen() {
   const { activeTheme, changeTheme, themes } = useTheme();
   const router = useRouter();
-  const navigation = useNavigation();
-  const [menuVisible, setMenuVisible] = useState(false);
+  const GlobalTextColour = activeTheme.textColor;
 
   console.log('ThemesScreen loaded with active theme:', activeTheme.name);
-
-  // Safe header sync using useLayoutEffect
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: 'Themes',
-      headerStyle: {
-        backgroundColor: activeTheme.headerColor,
-      },
-      headerTintColor: activeTheme.textColor,
-      headerShown: true,
-      headerTransparent: false,
-      headerShadowVisible: false,
-      headerBackVisible: false,
-      headerLeft: () => (
-        <TouchableOpacity
-          style={styles.hamburgerButton}
-          onPress={() => {
-            console.log('Hamburger menu button tapped from ThemesScreen');
-            setMenuVisible(true);
-          }}
-        >
-          <IconSymbol
-            ios_icon_name="line.horizontal.3"
-            android_material_icon_name="menu"
-            size={24}
-            color={activeTheme.textColor}
-          />
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation, activeTheme]);
 
   const handleThemeSelect = (themeId: string) => {
     console.log('User selected theme:', themeId);
     changeTheme(themeId);
   };
 
-  const handleCloseMenu = () => {
-    console.log('Left side menu closed from ThemesScreen');
-    setMenuVisible(false);
+  const handleBackPress = () => {
+    console.log('Back button pressed from ThemesScreen');
+    router.back();
   };
 
   const renderContent = () => (
     <>
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: 'Select Theme',
+          headerTransparent: true,
+          headerStyle: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          },
+          headerTintColor: GlobalTextColour,
+          headerLeft: () => (
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => handleBackPress()}
+            >
+              <IconSymbol
+                ios_icon_name="chevron.left"
+                android_material_icon_name="arrow-back"
+                size={24}
+                color={GlobalTextColour}
+              />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+
       <SafeAreaView style={styles.safeArea} edges={['bottom']}>
         <ScrollView
           style={styles.scrollView}
@@ -95,7 +85,7 @@ export default function ThemesScreen() {
                           { backgroundColor: theme.bgValue as string },
                           isActive && {
                             borderWidth: 4,
-                            borderColor: activeTheme.textColor,
+                            borderColor: GlobalTextColour,
                           },
                         ]}
                       />
@@ -106,7 +96,7 @@ export default function ThemesScreen() {
                           styles.previewBox,
                           isActive && {
                             borderWidth: 4,
-                            borderColor: activeTheme.textColor,
+                            borderColor: GlobalTextColour,
                           },
                         ]}
                         resizeMode="cover"
@@ -115,8 +105,7 @@ export default function ThemesScreen() {
                     <Text
                       style={[
                         styles.themeName,
-                        { color: activeTheme.textColor },
-                        styles.textShadow,
+                        { color: GlobalTextColour },
                       ]}
                     >
                       {themeName}
@@ -124,15 +113,14 @@ export default function ThemesScreen() {
                     <TouchableOpacity
                       style={[
                         styles.selectButton,
-                        { borderColor: activeTheme.textColor },
+                        { borderColor: GlobalTextColour },
                       ]}
                       onPress={() => handleThemeSelect(theme.id)}
                     >
                       <Text
                         style={[
                           styles.selectButtonText,
-                          { color: activeTheme.textColor },
-                          styles.textShadow,
+                          { color: GlobalTextColour },
                         ]}
                       >
                         Use
@@ -145,12 +133,6 @@ export default function ThemesScreen() {
           </View>
         </ScrollView>
       </SafeAreaView>
-
-      <LeftSideMenu
-        visible={menuVisible}
-        onClose={handleCloseMenu}
-        textColor={activeTheme.textColor}
-      />
     </>
   );
 
@@ -162,7 +144,6 @@ export default function ThemesScreen() {
           { backgroundColor: activeTheme.bgValue as string },
         ]}
       >
-        <View style={styles.overlay} />
         {renderContent()}
       </View>
     );
@@ -171,7 +152,7 @@ export default function ThemesScreen() {
   return (
     <ImageBackground
       source={resolveImageSource(activeTheme.bgValue)}
-      style={styles.container}
+      style={[styles.container, { backgroundColor: '#000000' }]}
       resizeMode="cover"
     >
       <View style={styles.overlay} />
@@ -186,12 +167,12 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
   },
   safeArea: {
     flex: 1,
   },
-  hamburgerButton: {
+  backButton: {
     padding: 8,
   },
   scrollView: {
@@ -199,7 +180,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 20,
-    paddingTop: 20,
+    paddingTop: 100,
   },
   gridContainer: {
     flexDirection: 'row',
@@ -222,11 +203,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 8,
     textAlign: 'center',
-  },
-  textShadow: {
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 4,
   },
   selectButton: {
     paddingHorizontal: 24,
