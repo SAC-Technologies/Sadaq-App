@@ -1,7 +1,6 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useDhikr } from '../contexts/DhikrContext';
-import * as Haptics from 'expo-haptics';
 
 const MAX_COUNTER_VALUE = 999999;
 const TAP_RATE_LIMIT = 7;
@@ -49,9 +48,6 @@ export function useCounter() {
       setShowWarning(true);
       return;
     }
-
-    // Trigger haptic feedback
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
     setCounterValue((prev) => {
       const newValue = prev >= MAX_COUNTER_VALUE ? 0 : prev + 1;
