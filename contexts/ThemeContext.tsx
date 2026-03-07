@@ -8,7 +8,6 @@ export interface Theme {
   bgValue: string | number;
   textColor: string;
   isPremium: boolean;
-  price: string | null;
 }
 
 interface ThemeContextType {
@@ -25,34 +24,22 @@ const THEMES: Theme[] = [
     bgValue: '#A4CFDB',
     textColor: '#FFFFFF',
     isPremium: false,
-    price: null,
   },
   {
     id: 'ottoman',
     name: 'Ottoman',
     bgType: 'image',
-    bgValue: require('../assets/images/5449ece5-657a-4fcb-9fff-f41eeb9dd9a8.png'),
+    bgValue: require('../assets/images/a9a9f69a-ac02-44a7-bbdb-e50b2dd2f5c9.jpeg'),
     textColor: '#FFFFFF',
     isPremium: false,
-    price: null,
-  },
-  {
-    id: 'putra',
-    name: 'Putra',
-    bgType: 'image',
-    bgValue: require('../assets/images/9e232940-5179-4cfd-a182-381421f4899c.png'),
-    textColor: '#B8860B',
-    isPremium: false,
-    price: null,
   },
   {
     id: 'alaouite',
     name: 'Alaouite',
     bgType: 'image',
-    bgValue: require('../assets/images/ae9b29db-1149-49a3-94ef-96c0cddedf61.png'),
+    bgValue: require('../assets/images/ae9e0222-8f1e-45ca-98ed-745953121c10.jpeg'),
     textColor: '#FDF8E4',
     isPremium: false,
-    price: null,
   },
 ];
 

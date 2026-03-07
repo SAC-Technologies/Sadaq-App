@@ -42,8 +42,8 @@ export default function RootLayout() {
     ...DarkTheme,
     colors: {
       ...DarkTheme.colors,
-      background: "#000080",
-      card: "#1E1E8F",
+      background: "#000000",
+      card: "#1E1E1E",
       text: "#FFFFFF",
       border: "#FFFFFF",
       primary: "#4169E1",
@@ -54,8 +54,8 @@ export default function RootLayout() {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: "#000080",
-      card: "#1E1E8F",
+      background: "#000000",
+      card: "#1E1E1E",
       text: "#FFFFFF",
       border: "#FFFFFF",
       primary: "#4169E1",
@@ -71,7 +71,13 @@ export default function RootLayout() {
               <SystemBars style="light" />
               <Stack
                 screenOptions={{
-                  headerShown: false,
+                  headerShown: true,
+                  headerTransparent: true,
+                  headerStyle: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  },
+                  headerShadowVisible: false,
+                  headerBackVisible: true,
                 }}
               >
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

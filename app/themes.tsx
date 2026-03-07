@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,10 +10,10 @@ import {
   Image,
   ImageSourcePropType,
 } from 'react-native';
-import { Stack, useRouter } from 'expo-router';
+import { Stack, useRouter, useNavigation } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { IconSymbol } from '@/components/IconSymbol';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useHeaderHeight } from '@react-navigation/elements';
 
 // Helper to resolve image sources (handles both local require() and remote URLs)
 function resolveImageSource(source: string | number | ImageSourcePropType | undefined): ImageSourcePropType {
@@ -23,12 +23,20 @@ function resolveImageSource(source: string | number | ImageSourcePropType | unde
 }
 
 export default function ThemesScreen() {
+  const navigation = useNavigation();
   const { activeTheme, changeTheme, themes } = useTheme();
   const router = useRouter();
+  const headerHeight = useHeaderHeight();
   const AppBackground = activeTheme.bgValue;
   const GlobalTextColour = activeTheme.textColor;
 
   console.log('ThemesScreen loaded with active theme:', activeTheme.name);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTintColor: GlobalTextColour,
+    });
+  }, [GlobalTextColour, navigation]);
 
   const handleThemeSelect = (themeId: string) => {
     console.log('User selected theme:', themeId);
@@ -46,10 +54,6 @@ export default function ThemesScreen() {
         options={{
           headerShown: true,
           title: 'Select Theme',
-          headerStyle: {
-            backgroundColor: typeof AppBackground === 'string' ? AppBackground : 'transparent',
-          },
-          headerTintColor: GlobalTextColour,
           headerLeft: () => (
             <TouchableOpacity
               style={styles.backButton}
@@ -66,7 +70,14 @@ export default function ThemesScreen() {
         }}
       />
 
-      <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+      <View
+        style={[
+          StyleSheet.absoluteFillObject,
+          { backgroundColor: 'rgba(0, 0, 0, 0.75)' },
+        ]}
+      />
+
+      <View style={[styles.contentContainer, { paddingTop: headerHeight }]}>
         <ScrollView
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
@@ -79,7 +90,6 @@ export default function ThemesScreen() {
               return (
                 <React.Fragment key={theme.id}>
                   <View style={styles.themeCard}>
-                    {/* Conditionally render preview based on bgType */}
                     {theme.bgType === 'color' ? (
                       <View
                         style={[
@@ -134,7 +144,7 @@ export default function ThemesScreen() {
             })}
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     </>
   );
 
@@ -155,6 +165,7 @@ export default function ThemesScreen() {
     <ImageBackground
       source={resolveImageSource(AppBackground)}
       style={styles.container}
+      resizeMode="cover"
     >
       {renderContent()}
     </ImageBackground>
@@ -165,7 +176,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  safeArea: {
+  contentContainer: {
     flex: 1,
   },
   backButton: {
