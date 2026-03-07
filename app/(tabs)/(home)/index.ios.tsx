@@ -49,6 +49,19 @@ export default function HomeScreen() {
       headerShown: true,
       headerTransparent: false,
       headerShadowVisible: false,
+      headerLeft: () => (
+        <TouchableOpacity
+          style={styles.hamburgerButton}
+          onPress={handleOpenMenu}
+        >
+          <IconSymbol
+            ios_icon_name="line.horizontal.3"
+            android_material_icon_name="menu"
+            size={24}
+            color={activeTheme.textColor}
+          />
+        </TouchableOpacity>
+      ),
     });
   }, [navigation, activeTheme]);
 
@@ -106,26 +119,6 @@ export default function HomeScreen() {
         activeTheme.bgType === 'color' && { backgroundColor: activeTheme.bgValue as string },
       ]}
     >
-      <Stack.Screen
-        options={{
-          headerShown: true,
-          title: 'Digital Tasbeeh',
-          headerLeft: () => (
-            <TouchableOpacity
-              style={styles.hamburgerButton}
-              onPress={handleOpenMenu}
-            >
-              <IconSymbol
-                ios_icon_name="line.horizontal.3"
-                android_material_icon_name="menu"
-                size={24}
-                color={activeTheme.textColor}
-              />
-            </TouchableOpacity>
-          ),
-        }}
-      />
-
       <View style={[StyleSheet.absoluteFillObject, styles.overlay]} />
 
       <SafeAreaView style={styles.safeArea} edges={['bottom']}>

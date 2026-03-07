@@ -11,12 +11,14 @@ import {
 } from 'react-native';
 import { IconSymbol } from '@/components/IconSymbol';
 import { BlurView } from 'expo-blur';
+import { useRouter, usePathname } from 'expo-router';
 
 interface MenuItem {
   id: string;
   label: string;
   ios_icon_name: string;
   android_material_icon_name: string;
+  route?: string;
 }
 
 const menuItems: MenuItem[] = [
@@ -25,12 +27,14 @@ const menuItems: MenuItem[] = [
     label: 'Home',
     ios_icon_name: 'house.fill',
     android_material_icon_name: 'home',
+    route: '/(tabs)/(home)',
   },
   {
     id: 'themes',
     label: 'Themes',
     ios_icon_name: 'paintbrush.fill',
     android_material_icon_name: 'palette',
+    route: '/themes',
   },
   {
     id: 'settings',
@@ -63,8 +67,42 @@ export default function LeftSideMenu({
   onClose,
   textColor,
 }: LeftSideMenuProps) {
-  const handleMenuItemPress = (itemLabel: string) => {
-    console.log('Menu item tapped:', itemLabel);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleMenuItemPress = (item: MenuItem) => {
+    console.log('Menu item tapped:', item.label);
+
+    // Smart navigation: check if we're already on the target route
+    if (item.route) {
+      const currentRoute = pathname;
+      const targetRoute = item.route;
+
+      console.log('Current route:', currentRoute, 'Target route:', targetRoute);
+
+      // If already on the target screen, just close the menu
+      if (currentRoute === targetRoute || currentRoute.startsWith(targetRoute)) {
+        console.log('Already on target screen, closing menu');
+        onClose();
+        return;
+      }
+
+      // Navigate to the target screen
+      if (targetRoute === '/(tabs)/(home)') {
+        // If navigating to Home from Themes, use replace to avoid stacking
+        console.log('Navigating to Home');
+        router.replace('/(tabs)/(home)');
+      } else {
+        console.log('Navigating to:', targetRoute);
+        router.push(targetRoute as any);
+      }
+
+      onClose();
+    } else {
+      // For items without routes (Settings, About, Rate us), just close for now
+      console.log('No route defined for:', item.label);
+      onClose();
+    }
   };
 
   return (
@@ -88,7 +126,7 @@ export default function LeftSideMenu({
                 <React.Fragment key={item.id}>
                   <TouchableOpacity
                     style={styles.menuItem}
-                    onPress={() => handleMenuItemPress(item.label)}
+                    onPress={() => handleMenuItemPress(item)}
                   >
                     <IconSymbol
                       ios_icon_name={item.ios_icon_name}
