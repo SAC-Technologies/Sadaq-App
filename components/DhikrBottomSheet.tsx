@@ -18,6 +18,7 @@ interface DhikrBottomSheetProps {
   activeDhikrIndex: number;
   textColor: string;
   backgroundColor: string;
+  bgType: 'color' | 'image';
 }
 
 export default function DhikrBottomSheet({
@@ -27,12 +28,15 @@ export default function DhikrBottomSheet({
   activeDhikrIndex,
   textColor,
   backgroundColor,
+  bgType,
 }: DhikrBottomSheetProps) {
   const handleSelectDhikr = (index: number) => {
     console.log('Dhikr option selected from bottom sheet:', DhikrList[index].dhikr_id);
     onSelectDhikr(index);
     onClose();
   };
+
+  const containerBgColor = bgType === 'image' ? 'rgba(0, 0, 0, 0.85)' : backgroundColor;
 
   return (
     <Modal
@@ -46,7 +50,7 @@ export default function DhikrBottomSheet({
         <Pressable style={styles.backdropPressable} onPress={onClose} />
         
         {/* The Container (Bottom Sheet View) */}
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: containerBgColor }]}>
           
           {/* The Header: Drag-indicator pill */}
           <View style={styles.dragIndicator} />
@@ -83,7 +87,7 @@ const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: 'rgba(0, 0, 0, 0.15)',
   },
   backdropPressable: {
     position: 'absolute',
@@ -98,7 +102,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
   // The Header: Drag-indicator pill
   dragIndicator: {

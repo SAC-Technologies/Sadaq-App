@@ -8,6 +8,7 @@ import {
   Pressable,
   Platform,
   ImageBackground,
+  ImageSourcePropType,
 } from 'react-native';
 import { Stack } from 'expo-router';
 import { IconSymbol } from '@/components/IconSymbol';
@@ -18,6 +19,13 @@ import WarningModal from '@/components/WarningModal';
 import LeftSideMenu from '@/components/LeftSideMenu';
 import DhikrBottomSheet from '@/components/DhikrBottomSheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+// Helper to resolve image sources (handles both local require() and remote URLs)
+function resolveImageSource(source: string | number | ImageSourcePropType | undefined): ImageSourcePropType {
+  if (!source) return { uri: '' };
+  if (typeof source === 'string') return { uri: source };
+  return source as ImageSourcePropType;
+}
 
 export default function HomeScreen() {
   const { activeTheme } = useTheme();
@@ -91,7 +99,7 @@ export default function HomeScreen() {
           headerShown: true,
           title: 'Digital Tasbeeh',
           headerStyle: {
-            backgroundColor: AppBackground,
+            backgroundColor: typeof AppBackground === 'string' ? AppBackground : 'transparent',
           },
           headerTintColor: GlobalTextColour,
           headerLeft: () => (
@@ -247,7 +255,8 @@ export default function HomeScreen() {
         onSelectDhikr={(index) => handleSelectDhikr(index)}
         activeDhikrIndex={activeDhikrIndex}
         textColor={GlobalTextColour}
-        backgroundColor={AppBackground}
+        backgroundColor={typeof AppBackground === 'string' ? AppBackground : '#000000'}
+        bgType={activeTheme.bgType}
       />
     </>
   );
@@ -257,7 +266,7 @@ export default function HomeScreen() {
       <View
         style={[
           styles.container,
-          { backgroundColor: AppBackground },
+          { backgroundColor: AppBackground as string },
         ]}
       >
         {renderContent()}
@@ -267,7 +276,7 @@ export default function HomeScreen() {
 
   return (
     <ImageBackground
-      source={{ uri: AppBackground }}
+      source={resolveImageSource(AppBackground)}
       style={styles.container}
     >
       {renderContent()}
