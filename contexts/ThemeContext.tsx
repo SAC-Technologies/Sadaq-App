@@ -5,7 +5,7 @@ export interface Theme {
   id: string;
   name: string;
   bgType: 'color' | 'image';
-  bgValue: string;
+  bgValue: string | number;
   textColor: string;
   isPremium: boolean;
   price: string | null;
@@ -28,20 +28,20 @@ const THEMES: Theme[] = [
     price: null,
   },
   {
-    id: 'dark',
-    name: 'Dark',
-    bgType: 'color',
-    bgValue: '#5E2D3C',
-    textColor: '#261A1E',
+    id: 'ottoman',
+    name: 'Ottoman',
+    bgType: 'image',
+    bgValue: require('../assets/images/ada424d2-bf03-4978-a567-4a2e3fbf171a.jpeg'),
+    textColor: '#FFFFFF',
     isPremium: false,
     price: null,
   },
   {
-    id: 'luxury',
-    name: 'Luxury',
-    bgType: 'color',
-    bgValue: '#C7B683',
-    textColor: '#33312B',
+    id: 'alaouite',
+    name: 'Alaouite',
+    bgType: 'image',
+    bgValue: require('../assets/images/03dfebd5-eb8c-4535-ab85-4d79ad385307.jpeg'),
+    textColor: '#FDF8E4',
     isPremium: false,
     price: null,
   },

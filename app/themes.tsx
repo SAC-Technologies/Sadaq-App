@@ -7,16 +7,23 @@ import {
   StyleSheet,
   ScrollView,
   ImageBackground,
+  Image,
 } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { IconSymbol } from '@/components/IconSymbol';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+// Helper to resolve image sources (handles both local require() and remote URLs)
+function resolveImageSource(source: string | number | undefined): any {
+  if (!source) return { uri: '' };
+  if (typeof source === 'string') return { uri: source };
+  return source;
+}
+
 export default function ThemesScreen() {
   const { activeTheme, changeTheme, themes } = useTheme();
   const router = useRouter();
-  const AppBackground = activeTheme.bgValue;
   const GlobalTextColour = activeTheme.textColor;
 
   console.log('ThemesScreen loaded with active theme:', activeTheme.name);
@@ -37,8 +44,9 @@ export default function ThemesScreen() {
         options={{
           headerShown: true,
           title: 'Select Theme',
+          headerTransparent: true,
           headerStyle: {
-            backgroundColor: AppBackground,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
           },
           headerTintColor: GlobalTextColour,
           headerLeft: () => (
@@ -63,24 +71,37 @@ export default function ThemesScreen() {
           contentContainerStyle={styles.scrollContent}
         >
           <View style={styles.gridContainer}>
-            {themes.map((theme, index) => {
+            {themes.map((theme) => {
               const isActive = theme.id === activeTheme.id;
-              const previewBgColor = theme.bgValue;
               const themeName = theme.name;
 
               return (
                 <React.Fragment key={theme.id}>
                   <View style={styles.themeCard}>
-                    <View
-                      style={[
-                        styles.previewBox,
-                        { backgroundColor: previewBgColor },
-                        isActive && {
-                          borderWidth: 4,
-                          borderColor: GlobalTextColour,
-                        },
-                      ]}
-                    />
+                    {theme.bgType === 'color' ? (
+                      <View
+                        style={[
+                          styles.previewBox,
+                          { backgroundColor: theme.bgValue as string },
+                          isActive && {
+                            borderWidth: 4,
+                            borderColor: GlobalTextColour,
+                          },
+                        ]}
+                      />
+                    ) : (
+                      <Image
+                        source={resolveImageSource(theme.bgValue)}
+                        style={[
+                          styles.previewBox,
+                          isActive && {
+                            borderWidth: 4,
+                            borderColor: GlobalTextColour,
+                          },
+                        ]}
+                        resizeMode="cover"
+                      />
+                    )}
                     <Text
                       style={[
                         styles.themeName,
@@ -120,7 +141,7 @@ export default function ThemesScreen() {
       <View
         style={[
           styles.container,
-          { backgroundColor: AppBackground },
+          { backgroundColor: activeTheme.bgValue as string },
         ]}
       >
         {renderContent()}
@@ -130,9 +151,11 @@ export default function ThemesScreen() {
 
   return (
     <ImageBackground
-      source={{ uri: AppBackground }}
-      style={styles.container}
+      source={resolveImageSource(activeTheme.bgValue)}
+      style={[styles.container, { backgroundColor: '#000000' }]}
+      resizeMode="cover"
     >
+      <View style={styles.overlay} />
       {renderContent()}
     </ImageBackground>
   );
@@ -141,6 +164,10 @@ export default function ThemesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
   },
   safeArea: {
     flex: 1,
@@ -153,6 +180,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 20,
+    paddingTop: 100,
   },
   gridContainer: {
     flexDirection: 'row',

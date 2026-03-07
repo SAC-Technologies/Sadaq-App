@@ -19,9 +19,15 @@ import LeftSideMenu from '@/components/LeftSideMenu';
 import DhikrBottomSheet from '@/components/DhikrBottomSheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+// Helper to resolve image sources (handles both local require() and remote URLs)
+function resolveImageSource(source: string | number | undefined): any {
+  if (!source) return { uri: '' };
+  if (typeof source === 'string') return { uri: source };
+  return source;
+}
+
 export default function HomeScreen() {
   const { activeTheme } = useTheme();
-  const AppBackground = activeTheme.bgValue;
   const GlobalTextColour = activeTheme.textColor;
 
   const {
@@ -48,6 +54,12 @@ export default function HomeScreen() {
   const dhikrTransliteration = activeDhikr.Transliteration;
   const dhikrMeaning = activeDhikr.Meaning;
   const dhikrSelectorText = activeDhikr.DhikrSelectorText;
+
+  const textShadowStyle = {
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 4,
+  };
 
   const handleOpenMenu = () => {
     console.log('Hamburger menu button tapped');
@@ -90,8 +102,9 @@ export default function HomeScreen() {
         options={{
           headerShown: true,
           title: 'Digital Tasbeeh',
+          headerTransparent: true,
           headerStyle: {
-            backgroundColor: AppBackground,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
           },
           headerTintColor: GlobalTextColour,
           headerLeft: () => (
@@ -117,6 +130,7 @@ export default function HomeScreen() {
               style={[
                 styles.dhikrArabic,
                 { color: GlobalTextColour },
+                textShadowStyle,
               ]}
             >
               {dhikrArabic}
@@ -125,6 +139,7 @@ export default function HomeScreen() {
               style={[
                 styles.dhikrTransliteration,
                 { color: GlobalTextColour },
+                textShadowStyle,
               ]}
             >
               {dhikrTransliteration}
@@ -133,6 +148,7 @@ export default function HomeScreen() {
               style={[
                 styles.dhikrMeaning,
                 { color: GlobalTextColour },
+                textShadowStyle,
               ]}
             >
               {dhikrMeaning}
@@ -164,6 +180,7 @@ export default function HomeScreen() {
                   style={[
                     styles.counterValue,
                     { color: GlobalTextColour },
+                    textShadowStyle,
                   ]}
                 >
                   {formattedCounterValue}
@@ -221,6 +238,7 @@ export default function HomeScreen() {
               style={[
                 styles.dhikrSelectorText,
                 { color: GlobalTextColour },
+                textShadowStyle,
               ]}
             >
               {dhikrSelectorText}
@@ -247,7 +265,8 @@ export default function HomeScreen() {
         onSelectDhikr={(index) => handleSelectDhikr(index)}
         activeDhikrIndex={activeDhikrIndex}
         textColor={GlobalTextColour}
-        backgroundColor={AppBackground}
+        backgroundColor={activeTheme.bgValue}
+        bgType={activeTheme.bgType}
       />
     </>
   );
@@ -257,7 +276,7 @@ export default function HomeScreen() {
       <View
         style={[
           styles.container,
-          { backgroundColor: AppBackground },
+          { backgroundColor: activeTheme.bgValue as string },
         ]}
       >
         {renderContent()}
@@ -267,8 +286,9 @@ export default function HomeScreen() {
 
   return (
     <ImageBackground
-      source={{ uri: AppBackground }}
+      source={resolveImageSource(activeTheme.bgValue)}
       style={styles.container}
+      resizeMode="cover"
     >
       {renderContent()}
     </ImageBackground>
