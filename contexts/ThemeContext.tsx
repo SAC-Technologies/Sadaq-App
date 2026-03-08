@@ -48,6 +48,17 @@ const themes: Theme[] = [
     price: null,
     overlayOpacity: 0,
   },
+  {
+    id: 'night',
+    name: 'Night',
+    bgType: 'image',
+    bgValue: require('../assets/images/d2b7cc17-c328-496f-bdaf-d6f5e296ae91.jpeg'),
+    textColor: '#F0F8FF',
+    headerColor: '#0A0E17',
+    isPremium: false,
+    price: null,
+    overlayOpacity: 0,
+  },
 ];
 
 interface ThemeContextType {
@@ -82,7 +93,6 @@ export const useTheme = () => {
   return context;
 };
 
-// Legacy hook for backward compatibility
 export function useThemeConfig() {
   const { activeTheme } = useTheme();
   return {
