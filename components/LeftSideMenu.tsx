@@ -45,12 +45,6 @@ const menuItems: MenuItem[] = [
     ios_icon_name: 'info.circle.fill',
     android_material_icon_name: 'info',
   },
-  {
-    id: 'rate',
-    label: 'Rate us',
-    ios_icon_name: 'star.fill',
-    android_material_icon_name: 'star',
-  },
 ];
 
 interface LeftSideMenuProps {
@@ -77,8 +71,10 @@ export default function LeftSideMenu({
     } else if (itemLabel === 'App Settings') {
       router.navigate('/app-settings');
       onClose();
+    } else if (itemLabel === 'About') {
+      router.navigate('/about');
+      onClose();
     }
-    // "About" and "Rate us" remain as static text with no routing
   };
 
   return (
