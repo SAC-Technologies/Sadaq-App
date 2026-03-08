@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Pressable,
   ImageBackground,
+  Dimensions,
 } from 'react-native';
 import { Stack, useNavigation } from 'expo-router';
 import { IconSymbol } from '@/components/IconSymbol';
@@ -18,6 +19,8 @@ import WarningModal from '@/components/WarningModal';
 import LeftSideMenu from '@/components/LeftSideMenu';
 import DhikrBottomSheet from '@/components/DhikrBottomSheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -167,6 +170,8 @@ export default function HomeScreen() {
                   { color: activeTheme.textColor },
                   styles.textShadow,
                 ]}
+                numberOfLines={3}
+                adjustsFontSizeToFit={true}
               >
                 {dhikrMeaning}
               </Text>
@@ -220,33 +225,29 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.buttonRow}>
-            <View style={styles.frostedButton}>
-              <TouchableOpacity
-                style={styles.actionButton}
-                onPress={resetCounter}
-              >
-                <IconSymbol
-                  ios_icon_name="arrow.clockwise"
-                  android_material_icon_name="refresh"
-                  size={28}
-                  color={activeTheme.textColor}
-                />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={styles.frostedButton}
+              onPress={resetCounter}
+            >
+              <IconSymbol
+                ios_icon_name="arrow.clockwise"
+                android_material_icon_name="refresh"
+                size={28}
+                color={activeTheme.textColor}
+              />
+            </TouchableOpacity>
 
-            <View style={styles.frostedButton}>
-              <TouchableOpacity
-                style={styles.actionButton}
-                onPress={decrementCounter}
-              >
-                <IconSymbol
-                  ios_icon_name="minus"
-                  android_material_icon_name="remove"
-                  size={28}
-                  color={activeTheme.textColor}
-                />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={styles.frostedButton}
+              onPress={decrementCounter}
+            >
+              <IconSymbol
+                ios_icon_name="minus"
+                android_material_icon_name="remove"
+                size={28}
+                color={activeTheme.textColor}
+              />
+            </TouchableOpacity>
           </View>
 
           <TouchableOpacity
@@ -262,6 +263,8 @@ export default function HomeScreen() {
                 { color: activeTheme.textColor },
                 styles.textShadow,
               ]}
+              numberOfLines={1}
+              ellipsizeMode="tail"
             >
               {dhikrSelectorText}
             </Text>
@@ -332,6 +335,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     textAlign: 'center',
+    width: '100%',
   },
   textShadow: {
     textShadowColor: 'rgba(0, 0, 0, 0.75)',
@@ -382,19 +386,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  actionButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   dhikrSelectorButton: {
+    width: SCREEN_WIDTH * 0.7,
     paddingHorizontal: 32,
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 2,
     backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   dhikrSelectorText: {
     fontSize: 18,
     fontWeight: '600',
+    textAlign: 'center',
   },
 });
