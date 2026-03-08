@@ -13,6 +13,7 @@ import { Stack, useNavigation } from 'expo-router';
 import { IconSymbol } from '@/components/IconSymbol';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useDhikr } from '@/contexts/DhikrContext';
+import { useSettings } from '@/contexts/SettingsContext';
 import { useCounter } from '@/hooks/useCounter';
 import WarningModal from '@/components/WarningModal';
 import LeftSideMenu from '@/components/LeftSideMenu';
@@ -29,6 +30,11 @@ export default function HomeScreen() {
     navigateDhikrNext,
     navigateDhikrPrev,
   } = useDhikr();
+  const {
+    showArabic,
+    showTransliteration,
+    showMeaning,
+  } = useSettings();
   const {
     counterValue,
     showWarning,
@@ -133,33 +139,39 @@ export default function HomeScreen() {
       <SafeAreaView style={styles.safeArea} edges={['bottom']}>
         <View style={styles.content}>
           <View style={styles.dhikrSection}>
-            <Text
-              style={[
-                styles.dhikrArabic,
-                { color: activeTheme.textColor },
-                styles.textShadow,
-              ]}
-            >
-              {dhikrArabic}
-            </Text>
-            <Text
-              style={[
-                styles.dhikrTransliteration,
-                { color: activeTheme.textColor },
-                styles.textShadow,
-              ]}
-            >
-              {dhikrTransliteration}
-            </Text>
-            <Text
-              style={[
-                styles.dhikrMeaning,
-                { color: activeTheme.textColor },
-                styles.textShadow,
-              ]}
-            >
-              {dhikrMeaning}
-            </Text>
+            {showArabic && (
+              <Text
+                style={[
+                  styles.dhikrArabic,
+                  { color: activeTheme.textColor },
+                  styles.textShadow,
+                ]}
+              >
+                {dhikrArabic}
+              </Text>
+            )}
+            {showTransliteration && (
+              <Text
+                style={[
+                  styles.dhikrTransliteration,
+                  { color: activeTheme.textColor },
+                  styles.textShadow,
+                ]}
+              >
+                {dhikrTransliteration}
+              </Text>
+            )}
+            {showMeaning && (
+              <Text
+                style={[
+                  styles.dhikrMeaning,
+                  { color: activeTheme.textColor },
+                  styles.textShadow,
+                ]}
+              >
+                {dhikrMeaning}
+              </Text>
+            )}
           </View>
 
           <View style={styles.counterContainer}>

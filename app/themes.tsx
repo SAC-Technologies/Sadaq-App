@@ -31,6 +31,7 @@ export default function ThemesScreen() {
       },
       headerTintColor: activeTheme.textColor,
       title: 'Themes',
+      headerBackTitle: 'Back',
     });
   }, [navigation, activeTheme]);
 
@@ -108,16 +109,13 @@ export default function ThemesScreen() {
                     {themeName}
                   </Text>
                   <TouchableOpacity
-                    style={[
-                      styles.selectButton,
-                      { backgroundColor: activeTheme.textColor },
-                    ]}
+                    style={styles.useButton}
                     onPress={() => handleThemeSelect(theme.id)}
                   >
                     <Text
                       style={[
-                        styles.selectButtonText,
-                        { color: activeTheme.headerColor },
+                        styles.useButtonText,
+                        { color: activeTheme.textColor },
                       ]}
                     >
                       Use
@@ -176,13 +174,16 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 4,
   },
-  selectButton: {
-    paddingHorizontal: 24,
+  useButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     paddingVertical: 8,
-    borderRadius: 8,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    marginTop: 10,
   },
-  selectButtonText: {
+  useButtonText: {
+    textAlign: 'center',
+    fontWeight: 'bold',
     fontSize: 14,
-    fontWeight: '600',
   },
 });

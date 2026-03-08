@@ -7,20 +7,27 @@ import {
   ScrollView,
   ImageBackground,
   Switch,
+  ImageSourcePropType,
 } from 'react-native';
 import { Stack, useNavigation } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useSettings } from '@/contexts/SettingsContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+function resolveImageSource(source: string | number | ImageSourcePropType | undefined): ImageSourcePropType {
+  if (!source) return { uri: '' };
+  if (typeof source === 'string') return { uri: source };
+  return source as ImageSourcePropType;
+}
+
 export default function AppSettingsScreen() {
   const navigation = useNavigation();
   const { activeTheme } = useTheme();
   const {
-    hapticsEnabled,
+    showArabic,
     showTransliteration,
     showMeaning,
-    toggleHaptics,
+    toggleArabic,
     toggleTransliteration,
     toggleMeaning,
   } = useSettings();
@@ -32,8 +39,7 @@ export default function AppSettingsScreen() {
       },
       headerTintColor: activeTheme.textColor,
       title: 'App Settings',
-      headerBackTitleVisible: false,
-      headerBackTitle: '',
+      headerBackTitle: 'Back',
     });
   }, [navigation, activeTheme]);
 
@@ -41,7 +47,7 @@ export default function AppSettingsScreen() {
 
   const BackgroundComponent = activeTheme.bgType === 'image' ? ImageBackground : View;
   const backgroundProps = activeTheme.bgType === 'image' 
-    ? { source: activeTheme.bgValue, resizeMode: 'cover' as const }
+    ? { source: resolveImageSource(activeTheme.bgValue), resizeMode: 'cover' as const }
     : {};
 
   return (
@@ -74,11 +80,11 @@ export default function AppSettingsScreen() {
                 styles.textShadow,
               ]}
             >
-              Haptic Feedback
+              Show Arabic
             </Text>
             <Switch
-              value={hapticsEnabled}
-              onValueChange={toggleHaptics}
+              value={showArabic}
+              onValueChange={toggleArabic}
               trackColor={{ false: '#767577', true: activeTheme.textColor }}
               thumbColor="#f4f3f4"
             />

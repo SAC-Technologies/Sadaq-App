@@ -2,10 +2,10 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface SettingsContextType {
-  hapticsEnabled: boolean;
+  showArabic: boolean;
   showTransliteration: boolean;
   showMeaning: boolean;
-  toggleHaptics: () => void;
+  toggleArabic: () => void;
   toggleTransliteration: () => void;
   toggleMeaning: () => void;
 }
@@ -13,13 +13,13 @@ interface SettingsContextType {
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
-  const [hapticsEnabled, setHapticsEnabled] = useState(true);
+  const [showArabic, setShowArabic] = useState(true);
   const [showTransliteration, setShowTransliteration] = useState(true);
   const [showMeaning, setShowMeaning] = useState(true);
 
-  const toggleHaptics = () => {
-    console.log('Toggling haptics:', !hapticsEnabled);
-    setHapticsEnabled((prev) => !prev);
+  const toggleArabic = () => {
+    console.log('Toggling Arabic:', !showArabic);
+    setShowArabic((prev) => !prev);
   };
 
   const toggleTransliteration = () => {
@@ -35,10 +35,10 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   return (
     <SettingsContext.Provider
       value={{
-        hapticsEnabled,
+        showArabic,
         showTransliteration,
         showMeaning,
-        toggleHaptics,
+        toggleArabic,
         toggleTransliteration,
         toggleMeaning,
       }}
