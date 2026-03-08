@@ -11,19 +11,16 @@ import {
 import { Stack, useNavigation } from 'expo-router';
 import { IconSymbol } from '@/components/IconSymbol';
 import { useTheme } from '@/contexts/ThemeContext';
-import { useSettings } from '@/contexts/SettingsContext';
 import { useDhikr } from '@/contexts/DhikrContext';
 import { useCounter } from '@/hooks/useCounter';
 import WarningModal from '@/components/WarningModal';
 import LeftSideMenu from '@/components/LeftSideMenu';
 import DhikrBottomSheet from '@/components/DhikrBottomSheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as Haptics from 'expo-haptics';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const { activeTheme } = useTheme();
-  const { hapticsEnabled, showTransliteration, showMeaning } = useSettings();
   const {
     activeDhikrIndex,
     activeDhikr,
@@ -97,14 +94,6 @@ export default function HomeScreen() {
     selectDhikr(index, counterValue);
   };
 
-  const handleCounterPress = () => {
-    console.log('Counter circle pressed');
-    if (hapticsEnabled) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    }
-    incrementCounter();
-  };
-
   const BackgroundComponent = activeTheme.bgType === 'image' ? ImageBackground : View;
   const backgroundProps = activeTheme.bgType === 'image' 
     ? { source: activeTheme.bgValue, resizeMode: 'cover' as const }
@@ -152,28 +141,24 @@ export default function HomeScreen() {
             >
               {dhikrArabic}
             </Text>
-            {showTransliteration && (
-              <Text
-                style={[
-                  styles.dhikrTransliteration,
-                  { color: activeTheme.textColor },
-                  styles.textShadow,
-                ]}
-              >
-                {dhikrTransliteration}
-              </Text>
-            )}
-            {showMeaning && (
-              <Text
-                style={[
-                  styles.dhikrMeaning,
-                  { color: activeTheme.textColor },
-                  styles.textShadow,
-                ]}
-              >
-                {dhikrMeaning}
-              </Text>
-            )}
+            <Text
+              style={[
+                styles.dhikrTransliteration,
+                { color: activeTheme.textColor },
+                styles.textShadow,
+              ]}
+            >
+              {dhikrTransliteration}
+            </Text>
+            <Text
+              style={[
+                styles.dhikrMeaning,
+                { color: activeTheme.textColor },
+                styles.textShadow,
+              ]}
+            >
+              {dhikrMeaning}
+            </Text>
           </View>
 
           <View style={styles.counterContainer}>
@@ -194,7 +179,7 @@ export default function HomeScreen() {
                 styles.counterCircle,
                 { borderColor: activeTheme.textColor },
               ]}
-              onPress={handleCounterPress}
+              onPress={incrementCounter}
             >
               <View style={styles.counterCircleArea}>
                 <Text
