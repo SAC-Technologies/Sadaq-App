@@ -4,11 +4,11 @@
     "slug": "i-want-to-build-a-di",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/app-icon-yii.png",
+    "icon": "./assets/images/Sukoon App.jpg",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/app-icon-yii.png",
+      "image": "./assets/images/Sukoon App.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
@@ -21,7 +21,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/app-icon-yii.png",
+        "foregroundImage": "./assets/images/Sukoon App.jpg",
         "backgroundColor": "#000000"
       },
       "edgeToEdgeEnabled": true,
