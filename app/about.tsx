@@ -8,6 +8,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   ImageSourcePropType,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack, useNavigation } from 'expo-router';
@@ -38,8 +39,23 @@ export default function AboutScreen() {
     textShadowRadius: 4,
   };
 
-  const appName = 'Digital Tasbeeh';
+  const appName = 'Sukoon - Tasbih for Mindful Dhikr';
   const versionNumber = 'Version 1.0.0';
+
+  const handlePrivacyPolicy = () => {
+    console.log('Opening Privacy Policy');
+    Linking.openURL('https://sites.google.com/view/sukoonapp/privacy-policy');
+  };
+
+  const handleTermsOfUse = () => {
+    console.log('Opening Terms of Use');
+    Linking.openURL('https://sites.google.com/view/sukoonapp/terms-of-use');
+  };
+
+  const handleContactSupport = () => {
+    console.log('Opening Contact Support email');
+    Linking.openURL('mailto:sactechnologiesbd@gmail.com');
+  };
 
   const renderBackground = () => {
     const overlayColor = `rgba(0, 0, 0, ${activeTheme.overlayOpacity})`;
@@ -92,7 +108,7 @@ export default function AboutScreen() {
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={[styles.pillButton, { backgroundColor: 'rgba(255, 255, 255, 0.2)' }]}
-              onPress={() => {}}
+              onPress={handlePrivacyPolicy}
             >
               <Text style={[styles.pillButtonText, { color: activeTheme.textColor }]}>
                 Privacy Policy
@@ -101,7 +117,7 @@ export default function AboutScreen() {
 
             <TouchableOpacity
               style={[styles.pillButton, { backgroundColor: 'rgba(255, 255, 255, 0.2)' }]}
-              onPress={() => {}}
+              onPress={handleTermsOfUse}
             >
               <Text style={[styles.pillButtonText, { color: activeTheme.textColor }]}>
                 Terms of Use
@@ -110,7 +126,7 @@ export default function AboutScreen() {
 
             <TouchableOpacity
               style={[styles.pillButton, { backgroundColor: 'rgba(255, 255, 255, 0.2)' }]}
-              onPress={() => {}}
+              onPress={handleContactSupport}
             >
               <Text style={[styles.pillButtonText, { color: activeTheme.textColor }]}>
                 Contact Support

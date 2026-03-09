@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "i-want-to-build-a-di",
-    "slug": "i-want-to-build-a-di",
+    "name": "Sukoon - Tasbih for Mindful Dhikr",
+    "slug": "sukoon-tasbih-for-mindful-dhikr",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/Sukoon App.jpg",
@@ -36,7 +36,7 @@
       "expo-router",
       "expo-web-browser"
     ],
-    "scheme": "iwanttobuildadi",
+    "scheme": "sukoontasbihformindfuldhikr",
     "experiments": {
       "typedRoutes": true
     },
