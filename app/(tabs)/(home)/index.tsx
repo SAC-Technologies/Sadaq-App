@@ -22,6 +22,8 @@ import DhikrBottomSheet from '@/components/DhikrBottomSheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
+const TRANSLITERATION_FONT_SIZE = 20;
+const ARABIC_FONT_SIZE = TRANSLITERATION_FONT_SIZE;
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -149,6 +151,8 @@ export default function HomeScreen() {
                   { color: activeTheme.textColor },
                   styles.textShadow,
                 ]}
+                numberOfLines={1}
+                adjustsFontSizeToFit={true}
               >
                 {dhikrArabic}
               </Text>
@@ -160,6 +164,8 @@ export default function HomeScreen() {
                   { color: activeTheme.textColor },
                   styles.textShadow,
                 ]}
+                numberOfLines={1}
+                adjustsFontSizeToFit={true}
               >
                 {dhikrTransliteration}
               </Text>
@@ -320,15 +326,18 @@ const styles = StyleSheet.create({
     minHeight: 140,
     justifyContent: 'center',
     width: '100%',
+    paddingHorizontal: 15,
   },
   dhikrArabic: {
-    fontSize: 32,
+    fontSize: ARABIC_FONT_SIZE,
+    lineHeight: ARABIC_FONT_SIZE * 1.8,
     fontWeight: '600',
     marginBottom: 8,
     textAlign: 'center',
+    paddingVertical: 10,
   },
   dhikrTransliteration: {
-    fontSize: 20,
+    fontSize: TRANSLITERATION_FONT_SIZE,
     fontWeight: '500',
     marginBottom: 4,
     textAlign: 'center',
