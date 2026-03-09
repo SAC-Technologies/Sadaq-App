@@ -61,17 +61,17 @@ export const DhikrList: DhikrItem[] = [
   },
   {
     dhikr_id: 'Rabbi zidni ilma',
-    Arabic: 'رَبِّ زِدْنِي عِلْمًا',
+    Arabic: 'رَ بِّ زِدْنِي عِلْمًا',
     Transliteration: 'Rabbi Zidni Ilma',
     Meaning: 'My Lord, increase me in knowledge',
     DhikrSelectorText: 'Rabbi zidni ilma',
   },
   {
-    dhikr_id: 'HasbunAllah wa ni\'mal wakeel',
+    dhikr_id: 'HasbunAllahu wa ni\'mal wakeel',
     Arabic: 'حَسْبُنَا ٱللَّٰهُ وَنِعْمَ ٱلْوَكِيلُ',
-    Transliteration: 'HasbunAllah Wa Ni\'mal Wakeel',
+    Transliteration: 'HasbunAllahu Wa Ni\'mal Wakeel',
     Meaning: 'Allah is Sufficient for us, and He is the best disposer of affairs',
-    DhikrSelectorText: 'HasbunAllah wa ni\'mal wakeel',
+    DhikrSelectorText: 'HasbunAllahu wa ni\'mal wakeel',
   },
   {
     dhikr_id: 'La Hawla Wala Quwata Illa Billah',
