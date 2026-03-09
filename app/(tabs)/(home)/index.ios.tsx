@@ -299,6 +299,9 @@ export default function HomeScreen() {
   );
 }
 
+const TRANSLITERATION_FONT_SIZE = 20;
+const ARABIC_FONT_SIZE = TRANSLITERATION_FONT_SIZE * 0.9;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -324,17 +327,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   dhikrArabic: {
-    fontSize: 32,
-    fontFamily: 'serif',
+    fontSize: ARABIC_FONT_SIZE,
+    fontFamily: 'Geeza Pro',
     fontWeight: '600',
     marginBottom: 8,
     textAlign: 'center',
     flexWrap: 'wrap',
-    lineHeight: 32 * 1.8,
+    lineHeight: ARABIC_FONT_SIZE * 1.8,
     paddingVertical: 8,
   },
   dhikrTransliteration: {
-    fontSize: 20,
+    fontSize: TRANSLITERATION_FONT_SIZE,
     fontWeight: '500',
     marginBottom: 4,
     textAlign: 'center',
