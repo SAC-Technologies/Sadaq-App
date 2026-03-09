@@ -12,21 +12,21 @@ export interface DhikrItem {
 export const DhikrList: DhikrItem[] = [
   {
     dhikr_id: 'Subhan Allah',
-    Arabic: 'سُبْحَانَ اللَّهِ',
+    Arabic: 'سُبْحَانَ ٱللَّٰهِ',
     Transliteration: 'Subḥān Allāh',
     Meaning: 'Glory be to Allah',
     DhikrSelectorText: 'Subhan Allah',
   },
   {
     dhikr_id: 'Alhamdulillah',
-    Arabic: 'الْحَمْدُ لِلَّهِ',
+    Arabic: 'ٱلْحَمْدُ لِلَّٰهِ',
     Transliteration: 'Alhamdulillah',
     Meaning: 'Praise be to Allah',
     DhikrSelectorText: 'Alhamdulillah',
   },
   {
     dhikr_id: 'Allahu Akbar',
-    Arabic: 'اللَّهُ أَكْبَرُ',
+    Arabic: 'ٱللَّٰهُ أَكْبَرُ',
     Transliteration: 'Allahu Akbar',
     Meaning: 'Allah is the Greatest',
     DhikrSelectorText: 'Allahu Akbar',
@@ -40,21 +40,21 @@ export const DhikrList: DhikrItem[] = [
   },
   {
     dhikr_id: 'Astagfirullah',
-    Arabic: 'أَسْتَغْفِرُ اللَّهَ',
+    Arabic: 'أَسْتَغْفِرُ ٱللَّٰهَ',
     Transliteration: 'Astagfirullah',
     Meaning: 'I seek forgiveness from Allah',
     DhikrSelectorText: 'Astagfirullah',
   },
   {
     dhikr_id: 'Subhan Allahi wa-bi Hamdihi',
-    Arabic: 'سُبْحَانَ اللّهِ وَ بِحَمْدِهِ',
+    Arabic: 'سُبْحَانَ ٱللَّٰهِ وَبِحَمْدِهِ',
     Transliteration: 'Subhan Allahi Wa Bihamdihi',
     Meaning: 'Glory and praise is to Allah',
     DhikrSelectorText: 'Subhan Allahi wa-bi Hamdihi',
   },
   {
     dhikr_id: 'Subhan Allahil Azeem',
-    Arabic: 'سُبْحَانَ اللَّهِ الْعَظِيمِ',
+    Arabic: 'سُبْحَانَ ٱللَّٰهِ ٱلْعَظِيمِ',
     Transliteration: 'Subhan Allahil Azeem',
     Meaning: 'Glory be to Allah, The Greatest',
     DhikrSelectorText: 'Subhan Allahil Azeem',
@@ -68,7 +68,7 @@ export const DhikrList: DhikrItem[] = [
   },
   {
     dhikr_id: 'La Hawla Wala Quwata Illa Billah',
-    Arabic: 'لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ',
+    Arabic: 'لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِٱللَّٰهِ',
     Transliteration: 'La Hawla Wala Quwata Illa Billah',
     Meaning: 'There is no power nor strength except with Allah',
     DhikrSelectorText: 'La Hawla Wala Quwata Illa Billah',

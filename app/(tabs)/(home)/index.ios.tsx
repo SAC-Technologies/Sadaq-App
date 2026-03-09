@@ -148,6 +148,7 @@ export default function HomeScreen() {
                   { color: activeTheme.textColor },
                   styles.textShadow,
                 ]}
+                numberOfLines={2}
               >
                 {dhikrArabic}
               </Text>
@@ -324,8 +325,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 8,
     textAlign: 'center',
-    paddingVertical: 10,
-    lineHeight: 32 * 1.6,
+    paddingVertical: 15,
   },
   dhikrTransliteration: {
     fontSize: 20,
