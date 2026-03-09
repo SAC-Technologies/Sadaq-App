@@ -148,8 +148,6 @@ export default function HomeScreen() {
                   { color: activeTheme.textColor },
                   styles.textShadow,
                 ]}
-                numberOfLines={2}
-                includeFontPadding={false}
               >
                 {dhikrArabic}
               </Text>
@@ -161,7 +159,6 @@ export default function HomeScreen() {
                   { color: activeTheme.textColor },
                   styles.textShadow,
                 ]}
-                numberOfLines={2}
               >
                 {dhikrTransliteration}
               </Text>
@@ -321,17 +318,12 @@ const styles = StyleSheet.create({
     minHeight: 140,
     justifyContent: 'center',
     width: '100%',
-    paddingHorizontal: 15,
   },
   dhikrArabic: {
     fontSize: 32,
-    fontFamily: 'serif',
     fontWeight: '600',
     marginBottom: 8,
     textAlign: 'center',
-    flexWrap: 'wrap',
-    lineHeight: 32 * 1.8,
-    paddingVertical: 8,
   },
   dhikrTransliteration: {
     fontSize: 20,
