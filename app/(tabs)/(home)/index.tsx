@@ -69,15 +69,6 @@ export default function HomeScreen() {
   const dhikrSelectorText = activeDhikr.DhikrSelectorText;
   const overlayColor = `rgba(0, 0, 0, ${activeTheme.overlayOpacity})`;
 
-  const transliterationFontSize = 20;
-  let arabicFontSize = transliterationFontSize * 0.9;
-  
-  if (Platform.OS === 'android') {
-    arabicFontSize = arabicFontSize * 1.1;
-  }
-  
-  const arabicLineHeight = arabicFontSize * 1.6;
-
   const handleOpenMenu = () => {
     console.log('Hamburger menu button tapped');
     setMenuVisible(true);
@@ -155,18 +146,9 @@ export default function HomeScreen() {
               <Text
                 style={[
                   styles.dhikrArabic,
-                  { 
-                    color: activeTheme.textColor,
-                    fontSize: arabicFontSize,
-                    lineHeight: arabicLineHeight,
-                    fontFamily: 'serif',
-                    paddingVertical: 12,
-                  },
-                  Platform.OS === 'android' && { includeFontPadding: false },
+                  { color: activeTheme.textColor },
                   styles.textShadow,
                 ]}
-                numberOfLines={1}
-                adjustsFontSizeToFit={true}
               >
                 {dhikrArabic}
               </Text>
@@ -175,14 +157,9 @@ export default function HomeScreen() {
               <Text
                 style={[
                   styles.dhikrTransliteration,
-                  { 
-                    color: activeTheme.textColor,
-                    fontSize: transliterationFontSize,
-                  },
+                  { color: activeTheme.textColor },
                   styles.textShadow,
                 ]}
-                numberOfLines={1}
-                adjustsFontSizeToFit={true}
               >
                 {dhikrTransliteration}
               </Text>
@@ -194,7 +171,7 @@ export default function HomeScreen() {
                   { color: activeTheme.textColor },
                   styles.textShadow,
                 ]}
-                numberOfLines={1}
+                numberOfLines={3}
                 adjustsFontSizeToFit={true}
               >
                 {dhikrMeaning}
@@ -339,17 +316,19 @@ const styles = StyleSheet.create({
   },
   dhikrSection: {
     alignItems: 'center',
-    justifyContent: 'center',
     marginBottom: 40,
-    height: 140,
+    minHeight: 140,
+    justifyContent: 'center',
     width: '100%',
   },
   dhikrArabic: {
+    fontSize: 32,
     fontWeight: '600',
     marginBottom: 8,
     textAlign: 'center',
   },
   dhikrTransliteration: {
+    fontSize: 20,
     fontWeight: '500',
     marginBottom: 4,
     textAlign: 'center',
