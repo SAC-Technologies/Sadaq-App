@@ -314,6 +314,7 @@ const styles = StyleSheet.create({
   hamburgerButton: {
     padding: 8,
     marginLeft: Platform.OS === 'android' ? 8 : 0,
+    backgroundColor: 'transparent',
   },
   dhikrSection: {
     alignItems: 'center',

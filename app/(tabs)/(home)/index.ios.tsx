@@ -312,6 +312,7 @@ const styles = StyleSheet.create({
   },
   hamburgerButton: {
     padding: 8,
+    backgroundColor: 'transparent',
   },
   dhikrSection: {
     alignItems: 'center',
