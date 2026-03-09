@@ -1,4 +1,4 @@
-# Sukoon - Tasbih for Mindful Dhikr
+# Sadaq - Tasbih for Mindful Dhikr
 
 This app was built using [Natively.dev](https://natively.dev) - a platform for creating mobile apps.
 

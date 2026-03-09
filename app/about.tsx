@@ -39,17 +39,17 @@ export default function AboutScreen() {
     textShadowRadius: 4,
   };
 
-  const appName = 'Sukoon - Tasbih for Mindful Dhikr';
+  const appName = 'Sadaq - Tasbih for Mindful Dhikr';
   const versionNumber = 'Version 1.0.0';
 
   const handlePrivacyPolicy = () => {
     console.log('Opening Privacy Policy');
-    Linking.openURL('https://sites.google.com/view/sukoonapp/privacy-policy');
+    Linking.openURL('https://sites.google.com/view/sadaqapp/privacy-policy');
   };
 
   const handleTermsOfUse = () => {
     console.log('Opening Terms of Use');
-    Linking.openURL('https://sites.google.com/view/sukoonapp/terms-of-use');
+    Linking.openURL('https://sites.google.com/view/sadaqapp/terms-of-use');
   };
 
   const handleContactSupport = () => {

@@ -120,7 +120,7 @@ export default function HomeScreen() {
       <Stack.Screen
         options={{
           headerShown: true,
-          title: 'Sukoon - Digital Tasbih',
+          title: 'Sadaq - Digital Tasbih',
           headerLeft: () => (
             <TouchableOpacity
               style={styles.hamburgerButton}
