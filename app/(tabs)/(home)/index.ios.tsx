@@ -68,6 +68,10 @@ export default function HomeScreen() {
   const dhikrSelectorText = activeDhikr.DhikrSelectorText;
   const overlayColor = `rgba(0, 0, 0, ${activeTheme.overlayOpacity})`;
 
+  const transliterationFontSize = 20;
+  const arabicFontSize = transliterationFontSize * 0.85;
+  const arabicLineHeight = arabicFontSize * 1.6;
+
   const handleOpenMenu = () => {
     console.log('Hamburger menu button tapped');
     setMenuVisible(true);
@@ -145,9 +149,16 @@ export default function HomeScreen() {
               <Text
                 style={[
                   styles.dhikrArabic,
-                  { color: activeTheme.textColor },
+                  { 
+                    color: activeTheme.textColor,
+                    fontSize: arabicFontSize,
+                    lineHeight: arabicLineHeight,
+                  },
                   styles.textShadow,
                 ]}
+                numberOfLines={1}
+                adjustsFontSizeToFit={true}
+                includeFontPadding={true}
               >
                 {dhikrArabic}
               </Text>
@@ -156,9 +167,14 @@ export default function HomeScreen() {
               <Text
                 style={[
                   styles.dhikrTransliteration,
-                  { color: activeTheme.textColor },
+                  { 
+                    color: activeTheme.textColor,
+                    fontSize: transliterationFontSize,
+                  },
                   styles.textShadow,
                 ]}
+                numberOfLines={1}
+                adjustsFontSizeToFit={true}
               >
                 {dhikrTransliteration}
               </Text>
@@ -320,13 +336,12 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   dhikrArabic: {
-    fontSize: 32,
     fontWeight: '600',
     marginBottom: 8,
     textAlign: 'center',
+    paddingVertical: 12,
   },
   dhikrTransliteration: {
-    fontSize: 20,
     fontWeight: '500',
     marginBottom: 4,
     textAlign: 'center',
