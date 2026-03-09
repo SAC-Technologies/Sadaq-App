@@ -70,7 +70,12 @@ export default function HomeScreen() {
   const overlayColor = `rgba(0, 0, 0, ${activeTheme.overlayOpacity})`;
 
   const transliterationFontSize = 20;
-  const arabicFontSize = transliterationFontSize * 0.85;
+  let arabicFontSize = transliterationFontSize * 0.9;
+  
+  if (Platform.OS === 'android') {
+    arabicFontSize = arabicFontSize * 1.1;
+  }
+  
   const arabicLineHeight = arabicFontSize * 1.6;
 
   const handleOpenMenu = () => {
@@ -154,12 +159,14 @@ export default function HomeScreen() {
                     color: activeTheme.textColor,
                     fontSize: arabicFontSize,
                     lineHeight: arabicLineHeight,
+                    fontFamily: 'serif',
+                    paddingVertical: 12,
                   },
+                  Platform.OS === 'android' && { includeFontPadding: false },
                   styles.textShadow,
                 ]}
                 numberOfLines={1}
                 adjustsFontSizeToFit={true}
-                includeFontPadding={true}
               >
                 {dhikrArabic}
               </Text>
@@ -187,7 +194,7 @@ export default function HomeScreen() {
                   { color: activeTheme.textColor },
                   styles.textShadow,
                 ]}
-                numberOfLines={3}
+                numberOfLines={1}
                 adjustsFontSizeToFit={true}
               >
                 {dhikrMeaning}
@@ -332,16 +339,15 @@ const styles = StyleSheet.create({
   },
   dhikrSection: {
     alignItems: 'center',
-    marginBottom: 40,
-    minHeight: 140,
     justifyContent: 'center',
+    marginBottom: 40,
+    height: 140,
     width: '100%',
   },
   dhikrArabic: {
     fontWeight: '600',
     marginBottom: 8,
     textAlign: 'center',
-    paddingVertical: 12,
   },
   dhikrTransliteration: {
     fontWeight: '500',
