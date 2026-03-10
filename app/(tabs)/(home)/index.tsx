@@ -330,7 +330,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingVertical: 15,
     fontFamily: 'Amiri_400Regular',
-    letterSpacing: 0,
   },
   dhikrTransliteration: {
     fontSize: 20,
