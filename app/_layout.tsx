@@ -19,6 +19,7 @@ import "react-native-reanimated";
 import { useNetworkState } from "expo-network";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
+import { Amiri_400Regular } from "@expo-google-fonts/amiri";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -26,6 +27,7 @@ export default function RootLayout() {
   const { isConnected } = useNetworkState();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    Amiri_400Regular,
   });
   const colorScheme = useColorScheme();
 
