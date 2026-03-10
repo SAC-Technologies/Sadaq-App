@@ -148,7 +148,8 @@ export default function HomeScreen() {
                   styles.dhikrArabic,
                   { color: activeTheme.textColor },
                   styles.textShadow,
-                ]}
+                                  { width: 240 }
+                            ]}
                 numberOfLines={2}
               >
                 {dhikrArabic}
