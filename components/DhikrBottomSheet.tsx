@@ -29,7 +29,6 @@ export default function DhikrBottomSheet({
   backgroundColor,
 }: DhikrBottomSheetProps) {
   const handleSelectDhikr = (index: number) => {
-    console.log('Dhikr option selected from bottom sheet:', DhikrList[index].dhikr_id);
     onSelectDhikr(index);
     onClose();
   };

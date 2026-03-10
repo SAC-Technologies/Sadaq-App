@@ -18,17 +18,14 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [showMeaning, setShowMeaning] = useState(true);
 
   const toggleArabic = () => {
-    console.log('Toggling Arabic:', !showArabic);
     setShowArabic((prev) => !prev);
   };
 
   const toggleTransliteration = () => {
-    console.log('Toggling transliteration:', !showTransliteration);
     setShowTransliteration((prev) => !prev);
   };
 
   const toggleMeaning = () => {
-    console.log('Toggling meaning:', !showMeaning);
     setShowMeaning((prev) => !prev);
   };
 

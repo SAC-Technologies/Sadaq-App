@@ -43,8 +43,6 @@ export default function AppSettingsScreen() {
     });
   }, [navigation, activeTheme]);
 
-  console.log('AppSettingsScreen loaded');
-
   const BackgroundComponent = activeTheme.bgType === 'image' ? ImageBackground : View;
   const backgroundProps = activeTheme.bgType === 'image' 
     ? { source: resolveImageSource(activeTheme.bgValue), resizeMode: 'cover' as const }

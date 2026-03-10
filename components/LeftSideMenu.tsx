@@ -61,8 +61,6 @@ export default function LeftSideMenu({
   const router = useRouter();
 
   const handleMenuItemPress = (itemLabel: string) => {
-    console.log('Menu item tapped:', itemLabel);
-    
     if (itemLabel === 'Home') {
       onClose();
     } else if (itemLabel === 'Themes') {

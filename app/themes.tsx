@@ -35,10 +35,7 @@ export default function ThemesScreen() {
     });
   }, [navigation, activeTheme]);
 
-  console.log('ThemesScreen loaded with active theme:', activeTheme.name);
-
   const handleThemeSelect = (themeId: string) => {
-    console.log('User selected theme:', themeId);
     changeTheme(themeId);
   };
 

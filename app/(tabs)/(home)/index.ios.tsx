@@ -69,37 +69,30 @@ export default function HomeScreen() {
   const overlayColor = `rgba(0, 0, 0, ${activeTheme.overlayOpacity})`;
 
   const handleOpenMenu = () => {
-    console.log('Hamburger menu button tapped');
     setMenuVisible(true);
   };
 
   const handleCloseMenu = () => {
-    console.log('Left side menu closed');
     setMenuVisible(false);
   };
 
   const handleOpenDhikrSheet = () => {
-    console.log('Dhikr selector button tapped');
     setDhikrSheetVisible(true);
   };
 
   const handleCloseDhikrSheet = () => {
-    console.log('Dhikr bottom sheet closed');
     setDhikrSheetVisible(false);
   };
 
   const handleLeftArrow = () => {
-    console.log('Left arrow button tapped');
     navigateDhikrPrev(counterValue);
   };
 
   const handleRightArrow = () => {
-    console.log('Right arrow button tapped');
     navigateDhikrNext(counterValue);
   };
 
   const handleSelectDhikr = (index: number) => {
-    console.log('Selecting Dhikr at index:', index);
     selectDhikr(index, counterValue);
   };
 

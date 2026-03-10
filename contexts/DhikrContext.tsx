@@ -74,6 +74,13 @@ export const DhikrList: DhikrItem[] = [
     DhikrSelectorText: 'La Hawla Wala Quwata Illa Billah',
   },
   {
+    dhikr_id: 'Rabbi zidni ilma',
+    Arabic: 'رَبِّ زِدْنِي عِلْمًا',
+    Transliteration: 'Rabbi Zidni Ilma',
+    Meaning: 'My Lord, increase me in knowledge',
+    DhikrSelectorText: 'Rabbi zidni ilma',
+  },
+  {
     dhikr_id: 'Tasbeeh',
     Arabic: 'Tasbeeh',
     Transliteration: ' ',
@@ -111,39 +118,31 @@ export function DhikrProvider({ children }: { children: ReactNode }) {
       initialCounts[dhikr.dhikr_id] = 0;
     });
     
-    console.log('Initializing Dhikr counts:', initialCounts);
     setDhikrCounts(initialCounts);
     isInitialized.current = true;
   }, []);
 
   const updateDhikrCount = (dhikrId: string, count: number) => {
-    console.log('Updating Dhikr count:', dhikrId, 'to', count);
     setDhikrCounts(prev => ({ ...prev, [dhikrId]: count }));
   };
 
   const selectDhikr = (index: number, currentCounterValue: number) => {
-    console.log('Saving current count for', activeDhikr.dhikr_id, ':', currentCounterValue);
     updateDhikrCount(activeDhikr.dhikr_id, currentCounterValue);
-    console.log('Dhikr selected:', DhikrList[index].dhikr_id);
     setActiveDhikrIndex(index);
   };
 
   const navigateDhikrNext = (currentCounterValue: number) => {
-    console.log('Saving current count for', activeDhikr.dhikr_id, ':', currentCounterValue);
     updateDhikrCount(activeDhikr.dhikr_id, currentCounterValue);
     setActiveDhikrIndex((prev) => {
       const nextIndex = (prev + 1) % DhikrList.length;
-      console.log('Navigating to next Dhikr:', DhikrList[nextIndex].dhikr_id);
       return nextIndex;
     });
   };
 
   const navigateDhikrPrev = (currentCounterValue: number) => {
-    console.log('Saving current count for', activeDhikr.dhikr_id, ':', currentCounterValue);
     updateDhikrCount(activeDhikr.dhikr_id, currentCounterValue);
     setActiveDhikrIndex((prev) => {
       const prevIndex = (prev - 1 + DhikrList.length) % DhikrList.length;
-      console.log('Navigating to previous Dhikr:', DhikrList[prevIndex].dhikr_id);
       return prevIndex;
     });
   };

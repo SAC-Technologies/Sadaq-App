@@ -14,12 +14,9 @@ export function useCounter() {
   const tapTimestamps = useRef<number[]>([]);
   const previousDhikrId = useRef<string>(activeDhikr.dhikr_id);
 
-  // Load saved count when activeDhikr changes
   useEffect(() => {
-    // Only update if the Dhikr actually changed
     if (previousDhikrId.current !== activeDhikr.dhikr_id) {
       const savedCount = dhikrCounts[activeDhikr.dhikr_id] || 0;
-      console.log('Loading saved count for', activeDhikr.dhikr_id, ':', savedCount);
       setCounterValue(savedCount);
       previousDhikrId.current = activeDhikr.dhikr_id;
     }
@@ -33,7 +30,6 @@ export function useCounter() {
     tapTimestamps.current = recentTaps;
 
     if (recentTaps.length >= TAP_RATE_LIMIT) {
-      console.log('Tap rate exceeded: User tapping too fast');
       return false;
     }
 
@@ -41,46 +37,36 @@ export function useCounter() {
     return true;
   }, []);
 
-  const incrementCounter = useCallback(() => {
-    console.log('Counter increment attempted');
-    
+  const incrementCounter = useCallback(async () => {
     if (!checkTapRate()) {
-      console.log('Showing warning modal');
       setShowWarning(true);
       return;
     }
 
-    // Trigger haptic feedback
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
     setCounterValue((prev) => {
       const newValue = prev >= MAX_COUNTER_VALUE ? 0 : prev + 1;
-      console.log('Counter value changed:', prev, '->', newValue);
       return newValue;
     });
     
-    // Update global state AFTER local state update, outside the setter callback
     const newValue = counterValue >= MAX_COUNTER_VALUE ? 0 : counterValue + 1;
     updateDhikrCount(activeDhikr.dhikr_id, newValue);
   }, [checkTapRate, activeDhikr.dhikr_id, updateDhikrCount, counterValue]);
 
   const decrementCounter = useCallback(() => {
-    console.log('Counter decrement button tapped');
     const newValue = Math.max(0, counterValue - 1);
-    console.log('Counter value changed:', counterValue, '->', newValue);
     setCounterValue(newValue);
     updateDhikrCount(activeDhikr.dhikr_id, newValue);
   }, [activeDhikr.dhikr_id, updateDhikrCount, counterValue]);
 
   const resetCounter = useCallback(() => {
-    console.log('Counter reset button tapped for', activeDhikr.dhikr_id);
     setCounterValue(0);
     updateDhikrCount(activeDhikr.dhikr_id, 0);
     tapTimestamps.current = [];
   }, [activeDhikr.dhikr_id, updateDhikrCount]);
 
   const closeWarning = useCallback(() => {
-    console.log('Warning modal closed');
     setShowWarning(false);
   }, []);
 

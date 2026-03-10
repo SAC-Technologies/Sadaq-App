@@ -74,7 +74,6 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const activeTheme = themes.find(theme => theme.id === activeThemeId) || themes[0];
 
   const changeTheme = (themeId: string) => {
-    console.log('Changing theme to:', themeId);
     setActiveThemeId(themeId);
   };
 

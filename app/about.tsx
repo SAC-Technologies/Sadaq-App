@@ -43,17 +43,14 @@ export default function AboutScreen() {
   const versionNumber = 'Version 1.0.0';
 
   const handlePrivacyPolicy = () => {
-    console.log('Opening Privacy Policy');
     Linking.openURL('https://sites.google.com/view/sadaqapp/privacy-policy');
   };
 
   const handleTermsOfUse = () => {
-    console.log('Opening Terms of Use');
     Linking.openURL('https://sites.google.com/view/sadaqapp/terms-of-use');
   };
 
   const handleContactSupport = () => {
-    console.log('Opening Contact Support email');
     Linking.openURL('mailto:sactechnologiesbd@gmail.com');
   };
 
