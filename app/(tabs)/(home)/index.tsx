@@ -330,6 +330,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingVertical: 15,
     fontFamily: 'Amiri_400Regular',
+    ...Platform.select({
+      android: {
+        includeFontPadding: false,
+        textAlignVertical: 'center',
+        lineHeight: undefined,
+        letterSpacing: undefined,
+      },
+      ios: {
+        letterSpacing: 0,
+      },
+    }),
   },
   dhikrTransliteration: {
     fontSize: 20,
