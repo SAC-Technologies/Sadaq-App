@@ -1,15 +1,15 @@
 
 {
   "expo": {
-    "name": "Sadaq",
-    "slug": "sadaq-tasbih-for-mindful-dhikr",
+    "name": "Sadaq - Tasbih for Mindful Dhikr",
+    "slug": "sadaq",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/Sukoon App.jpg",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/Sadaq Splash Screen.png",
+      "image": "./assets/images/Sukoon App.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#89D5EF"
     },
@@ -26,8 +26,7 @@
         "foregroundImage": "./assets/images/Sukoon App.jpg",
         "backgroundColor": "#000000"
       },
-      "edgeToEdgeEnabled": true,
-      "package": "com.placeholder.app"
+      "package": "com.sactechnologies.sadaq"
     },
     "web": {
       "favicon": "./assets/images/final_quest_240x240.png",
