@@ -13,7 +13,7 @@ import { SettingsProvider } from "@/contexts/SettingsContext";
 import { DhikrProvider } from "@/contexts/DhikrContext";
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { SystemBars } from "react-native-edge-to-edge";
 import "react-native-reanimated";
 import { useNetworkState } from "expo-network";
@@ -25,19 +25,55 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const { isConnected } = useNetworkState();
-  const [loaded] = useFonts({
+  const [loaded, fontError] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     Amiri_400Regular,
   });
   const colorScheme = useColorScheme();
+  const splashHiddenRef = useRef(false);
 
+  // Robust splash screen hiding with multiple fallback mechanisms
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+    const hideSplashScreen = async () => {
+      if (splashHiddenRef.current) {
+        return;
+      }
 
-  if (!loaded) {
+      try {
+        await SplashScreen.hideAsync();
+        splashHiddenRef.current = true;
+      } catch (error) {
+        // Silently handle error - splash screen might already be hidden
+        splashHiddenRef.current = true;
+      }
+    };
+
+    // Case 1: Fonts loaded successfully
+    if (loaded) {
+      hideSplashScreen();
+      return;
+    }
+
+    // Case 2: Font loading error - hide splash screen anyway to prevent stuck state
+    if (fontError) {
+      hideSplashScreen();
+      return;
+    }
+
+    // Case 3: Timeout fallback - ensure splash screen ALWAYS hides after 5 seconds
+    // This prevents the app from being permanently stuck on splash screen
+    const timeoutId = setTimeout(() => {
+      if (!splashHiddenRef.current) {
+        hideSplashScreen();
+      }
+    }, 5000);
+
+    return () => clearTimeout(timeoutId);
+  }, [loaded, fontError]);
+
+  // Show nothing while fonts are loading (keeps splash screen visible)
+  // But the timeout ensures we won't be stuck here forever
+  if (!loaded && !fontError) {
     return null;
   }
 
